@@ -34,4 +34,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorObject, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler({ResourceNotFoundException.class})
+    public ResponseEntity<ErrorObject> handleResourceNotFound(RuntimeException ex, WebRequest request) {
+        ErrorObject errorObject = new ErrorObject();
+
+        errorObject
+                .setStatusCode(HttpStatus.NOT_FOUND.value())
+                .setMessage(ex.getMessage())
+                .setTimestamp(LocalDateTime.now());
+        return new ResponseEntity<>(errorObject, HttpStatus.NOT_FOUND);
+    }
+
 }

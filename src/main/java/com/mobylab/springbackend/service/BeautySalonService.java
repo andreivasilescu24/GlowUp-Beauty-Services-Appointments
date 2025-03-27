@@ -1,0 +1,87 @@
+package com.mobylab.springbackend.service;
+
+import com.mobylab.springbackend.entity.BeautySalon;
+import com.mobylab.springbackend.exception.ResourceNotFoundException;
+import com.mobylab.springbackend.repository.BeautySalonRepository;
+import com.mobylab.springbackend.service.dto.BeautySalonDto;
+import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Service
+@Transactional
+public class BeautySalonService {
+    private final BeautySalonRepository beautySalonRepository;
+
+    public BeautySalonService(BeautySalonRepository beautySalonRepository) {
+        this.beautySalonRepository = beautySalonRepository;
+    }
+
+    public List<BeautySalonDto> getBeautySalons() {
+        List<BeautySalon> salonList = beautySalonRepository.findAll();
+        return salonList.stream().map(beautySalon ->
+                new BeautySalonDto()
+                        .setName(beautySalon.getName())
+                        .setCity(beautySalon.getCity())
+                        .setAddress(beautySalon.getAddress())
+                        .setEmail(beautySalon.getEmail())
+                        .setPhone(beautySalon.getPhone())
+                        .setNumEmployees(beautySalon.getNumEmployees())
+        ).collect(Collectors.toList());
+    }
+
+    public BeautySalonDto getBeautySalon(UUID id) {
+        Optional<BeautySalon> optionalBeautySalon = beautySalonRepository.getBeautySalonById(id);
+        if (optionalBeautySalon.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Beauty salon not found");
+        } else {
+            BeautySalon beautySalon = optionalBeautySalon.get();
+            return new BeautySalonDto()
+                    .setName(beautySalon.getName())
+                    .setCity(beautySalon.getCity())
+                    .setAddress(beautySalon.getAddress())
+                    .setEmail(beautySalon.getEmail())
+                    .setPhone(beautySalon.getPhone())
+                    .setNumEmployees(beautySalon.getNumEmployees());
+        }
+    }
+
+    public BeautySalon addBeautySalon(BeautySalonDto beautySalonDto) {
+        BeautySalon beautySalon = new BeautySalon();
+        beautySalon.setName(beautySalonDto.getName());
+        beautySalon.setCity(beautySalonDto.getCity());
+        beautySalon.setAddress(beautySalonDto.getAddress());
+        beautySalon.setEmail(beautySalonDto.getEmail());
+        beautySalon.setPhone(beautySalonDto.getPhone());
+        beautySalon.setNumEmployees(beautySalonDto.getNumEmployees());
+
+        return beautySalonRepository.save(beautySalon);
+    }
+
+    public void deleteBeautySalon(UUID id) {
+        BeautySalon beautySalon = beautySalonRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Beauty salon not found"));
+
+        beautySalonRepository.delete(beautySalon);
+        }
+
+    public BeautySalon updateBeautySalon(UUID id, BeautySalonDto beautySalonDto) {
+        BeautySalon beautySalon = beautySalonRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Beauty salon not found"));
+
+        beautySalon.setName(beautySalonDto.getName());
+        beautySalon.setCity(beautySalonDto.getCity());
+        beautySalon.setAddress(beautySalonDto.getAddress());
+        beautySalon.setEmail(beautySalonDto.getEmail());
+        beautySalon.setPhone(beautySalonDto.getPhone());
+        beautySalon.setNumEmployees(beautySalonDto.getNumEmployees());
+
+        return beautySalonRepository.save(beautySalon);
+    }
+}

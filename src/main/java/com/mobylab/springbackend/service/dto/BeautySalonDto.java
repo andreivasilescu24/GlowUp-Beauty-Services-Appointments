@@ -1,76 +1,64 @@
-package com.mobylab.springbackend.entity;
+package com.mobylab.springbackend.service.dto;
 
-import jakarta.persistence.*;
-
-import java.util.UUID;
-
-@Entity
-@Table(name = "beauty_saloon")
-public class BeautySaloon {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+public class BeautySalonDto {
     private String name;
     private String address;
     private String email;
     private String phone;
-    @Column(name = "num_employees")
     private int numEmployees;
     private String city;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public BeautySalonDto setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public BeautySalonDto setAddress(String address) {
         this.address = address;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public BeautySalonDto setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     public String getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public BeautySalonDto setPhone(String phone) {
         this.phone = phone;
+        return this;
     }
 
     public int getNumEmployees() {
         return numEmployees;
     }
 
-    public void setNumEmployees(int numEmployees) {
+    public BeautySalonDto setNumEmployees(int numEmployees) {
         this.numEmployees = numEmployees;
+        return this;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public BeautySalonDto setCity(String city) {
         this.city = city;
+        return this;
     }
 }
