@@ -39,7 +39,7 @@ public class BeautySalonService {
     public BeautySalonDto getBeautySalon(UUID id) {
         Optional<BeautySalon> optionalBeautySalon = beautySalonRepository.getBeautySalonById(id);
         if (optionalBeautySalon.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Beauty salon not found");
+            throw new ResourceNotFoundException("Beauty salon not found");
         } else {
             BeautySalon beautySalon = optionalBeautySalon.get();
             return new BeautySalonDto()
@@ -73,7 +73,7 @@ public class BeautySalonService {
 
     public BeautySalon updateBeautySalon(UUID id, BeautySalonDto beautySalonDto) {
         BeautySalon beautySalon = beautySalonRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Beauty salon not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Beauty salon not found"));
 
         beautySalon.setName(beautySalonDto.getName());
         beautySalon.setCity(beautySalonDto.getCity());
