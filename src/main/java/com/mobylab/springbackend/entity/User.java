@@ -23,8 +23,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
-    @Column(name = "username")
-    private String username;
+    @Column(name = "name")
+    private String name;
     @Column(name = "email")
     private String email;
     @Column(name = "password")
@@ -44,12 +44,12 @@ public class User {
         return this;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public User setUsername(String username) {
-        this.username = username;
+    public User setName(String username) {
+        this.name = username;
         return this;
     }
 

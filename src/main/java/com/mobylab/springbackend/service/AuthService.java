@@ -51,7 +51,7 @@ public class AuthService {
         userRepository.save(new User()
                 .setEmail(registerDto.getEmail())
                 .setPassword(passwordEncoder.encode(registerDto.getPassword()))
-                .setUsername(registerDto.getUsername())
+                .setName(registerDto.getUsername())
                 .setRoles(roleList));
     }
 

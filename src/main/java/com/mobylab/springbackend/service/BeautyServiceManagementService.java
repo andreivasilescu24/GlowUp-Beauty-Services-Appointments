@@ -28,8 +28,7 @@ public class BeautyServiceManagementService {
     }
 
     private BeautySalon getCorrespondingBeautySalon(UUID salonId) {
-        return beautySalonRepository.getBeautySalonById(salonId)
-                .orElseThrow(() -> new ResourceNotFoundException("Beauty salon not found"));
+        return beautySalonRepository.getBeautySalonById(salonId).orElseThrow(() -> new ResourceNotFoundException("Beauty salon not found"));
     }
 
     public List<BeautyServiceDto> getBeautyServices(UUID salonId) {

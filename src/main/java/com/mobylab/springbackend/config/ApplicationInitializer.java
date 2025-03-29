@@ -4,7 +4,6 @@ import com.mobylab.springbackend.entity.Role;
 import com.mobylab.springbackend.entity.User;
 import com.mobylab.springbackend.repository.RoleRepository;
 import com.mobylab.springbackend.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,7 +46,7 @@ public class ApplicationInitializer implements CommandLineRunner {
 
             roleList.add(adminRole.get());
             User initAdmin = new User()
-                    .setUsername(adminUsername)
+                    .setName(adminUsername)
                     .setEmail(adminEmail)
                     .setPassword(passwordEncoder.encode(adminPassword))
                     .setRoles(roleList);
