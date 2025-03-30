@@ -11,14 +11,29 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
     @ManyToOne
     @JoinColumn(name = "salon_id", nullable = false)
     private BeautySalon beautySalon;
     private int experience;
+
+    private String name;
+    private String phone;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public UUID getId() {
         return id;
@@ -26,14 +41,6 @@ public class Employee {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public BeautySalon getBeautySalon() {
