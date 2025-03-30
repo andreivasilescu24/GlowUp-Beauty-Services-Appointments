@@ -3,6 +3,7 @@ package com.mobylab.springbackend.controller;
 import com.mobylab.springbackend.entity.BeautySalon;
 import com.mobylab.springbackend.service.BeautySalonService;
 import com.mobylab.springbackend.service.dto.BeautySalonDto;
+import com.mobylab.springbackend.service.dto.CreateBeautySalonDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class BeautySalonController implements SecuredRestController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<BeautySalon> addBeautySalon(@RequestBody BeautySalonDto beautySalonDto) {
+    public ResponseEntity<BeautySalon> addBeautySalon(@RequestBody CreateBeautySalonDto beautySalonDto) {
         BeautySalon beautySalon = beautySalonService.addBeautySalon(beautySalonDto);
         return ResponseEntity.status(201).body(beautySalon);
     }
@@ -48,7 +49,7 @@ public class BeautySalonController implements SecuredRestController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<BeautySalon> updateBeautySalon(@PathVariable UUID id, @RequestBody BeautySalonDto beautySalonDto) {
+    public ResponseEntity<BeautySalon> updateBeautySalon(@PathVariable UUID id, @RequestBody CreateBeautySalonDto beautySalonDto) {
         BeautySalon beautySalon = beautySalonService.updateBeautySalon(id, beautySalonDto);
         return ResponseEntity.status(200).body(beautySalon);
     }

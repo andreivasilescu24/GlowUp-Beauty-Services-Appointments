@@ -1,21 +1,18 @@
 package com.mobylab.springbackend.service.dto;
 
-import java.util.UUID;
-
-public class BeautySalonDto {
+public class CreateBeautySalonDto {
     private String name;
     private String address;
     private String email;
     private String phone;
     private int numEmployees;
     private String city;
-    private UUID id;
 
     public String getName() {
         return name;
     }
 
-    public BeautySalonDto setName(String name) {
+    public CreateBeautySalonDto setName(String name) {
         this.name = name;
         return this;
     }
@@ -24,16 +21,17 @@ public class BeautySalonDto {
         return address;
     }
 
-    public BeautySalonDto setAddress(String address) {
+    public CreateBeautySalonDto setAddress(String address) {
         this.address = address;
         return this;
+
     }
 
     public String getEmail() {
         return email;
     }
 
-    public BeautySalonDto setEmail(String email) {
+    public CreateBeautySalonDto setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -42,7 +40,7 @@ public class BeautySalonDto {
         return phone;
     }
 
-    public BeautySalonDto setPhone(String phone) {
+    public CreateBeautySalonDto setPhone(String phone) {
         this.phone = phone;
         return this;
     }
@@ -51,7 +49,7 @@ public class BeautySalonDto {
         return numEmployees;
     }
 
-    public BeautySalonDto setNumEmployees(int numEmployees) {
+    public CreateBeautySalonDto setNumEmployees(int numEmployees) {
         this.numEmployees = numEmployees;
         return this;
     }
@@ -60,18 +58,8 @@ public class BeautySalonDto {
         return city;
     }
 
-    public BeautySalonDto setCity(String city) {
+    public CreateBeautySalonDto setCity(String city) {
         this.city = city;
         return this;
     }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public BeautySalonDto setId(UUID id) {
-        this.id = id;
-        return this;
-    }
-
 }

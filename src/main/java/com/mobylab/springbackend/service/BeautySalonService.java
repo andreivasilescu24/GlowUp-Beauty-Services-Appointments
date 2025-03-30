@@ -4,6 +4,7 @@ import com.mobylab.springbackend.entity.BeautySalon;
 import com.mobylab.springbackend.exception.ResourceNotFoundException;
 import com.mobylab.springbackend.repository.BeautySalonRepository;
 import com.mobylab.springbackend.service.dto.BeautySalonDto;
+import com.mobylab.springbackend.service.dto.CreateBeautySalonDto;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class BeautySalonService {
         List<BeautySalon> salonList = beautySalonRepository.findAll();
         return salonList.stream().map(beautySalon ->
                 new BeautySalonDto()
+                        .setId(beautySalon.getId())
                         .setName(beautySalon.getName())
                         .setCity(beautySalon.getCity())
                         .setAddress(beautySalon.getAddress())
@@ -43,6 +45,7 @@ public class BeautySalonService {
         } else {
             BeautySalon beautySalon = optionalBeautySalon.get();
             return new BeautySalonDto()
+                    .setId(beautySalon.getId())
                     .setName(beautySalon.getName())
                     .setCity(beautySalon.getCity())
                     .setAddress(beautySalon.getAddress())
@@ -52,7 +55,7 @@ public class BeautySalonService {
         }
     }
 
-    public BeautySalon addBeautySalon(BeautySalonDto beautySalonDto) {
+    public BeautySalon addBeautySalon(CreateBeautySalonDto beautySalonDto) {
         BeautySalon beautySalon = new BeautySalon();
         beautySalon.setName(beautySalonDto.getName());
         beautySalon.setCity(beautySalonDto.getCity());
@@ -69,9 +72,9 @@ public class BeautySalonService {
                 .orElseThrow(() -> new ResourceNotFoundException("Beauty salon not found"));
 
         beautySalonRepository.delete(beautySalon);
-        }
+    }
 
-    public BeautySalon updateBeautySalon(UUID id, BeautySalonDto beautySalonDto) {
+    public BeautySalon updateBeautySalon(UUID id, CreateBeautySalonDto beautySalonDto) {
         BeautySalon beautySalon = beautySalonRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Beauty salon not found"));
 

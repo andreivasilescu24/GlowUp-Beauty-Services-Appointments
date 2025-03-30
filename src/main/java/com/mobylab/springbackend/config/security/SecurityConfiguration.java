@@ -38,7 +38,7 @@ public class SecurityConfiguration {
             http.authorizeHttpRequests(auth -> auth
                             .requestMatchers(HttpMethod.DELETE, "/beautySaloon/**").authenticated()
                             .requestMatchers("/api/v1/auth/login", "/api/v1/auth/register",
-                                    "/api/v1/beautySalon/**", "/api/v1/{salon_id}/employees/**",
+                                    "/api/v1/beautySalon/**",
                                     "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                             .anyRequest().authenticated())
                     .exceptionHandling((exception) -> exception.authenticationEntryPoint(authEntryPoint))

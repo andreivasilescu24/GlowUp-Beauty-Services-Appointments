@@ -12,8 +12,6 @@ public class BeautyService {
     private UUID id;
     private String name;
     private String description;
-    private double price;
-    private int duration;
 
     @ManyToOne
     @JoinColumn(name = "salon_id", nullable = false)
@@ -41,22 +39,6 @@ public class BeautyService {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
     }
 
     public BeautySalon getBeautySalon() {

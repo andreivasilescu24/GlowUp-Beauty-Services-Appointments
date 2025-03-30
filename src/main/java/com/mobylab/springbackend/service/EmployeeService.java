@@ -2,9 +2,13 @@ package com.mobylab.springbackend.service;
 
 import com.mobylab.springbackend.entity.BeautySalon;
 import com.mobylab.springbackend.entity.Employee;
+import com.mobylab.springbackend.entity.EmployeeAvailableService;
 import com.mobylab.springbackend.exception.ResourceNotFoundException;
 import com.mobylab.springbackend.repository.BeautySalonRepository;
+import com.mobylab.springbackend.repository.EmployeeAvailableServiceRepository;
 import com.mobylab.springbackend.repository.EmployeesRepository;
+import com.mobylab.springbackend.service.dto.CreateEmployeeAvailableServiceDto;
+import com.mobylab.springbackend.service.dto.EmployeeAvailableServiceDto;
 import com.mobylab.springbackend.service.dto.EmployeeDto;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -20,10 +24,13 @@ import java.util.stream.Collectors;
 public class EmployeeService {
     private final EmployeesRepository employeesRepository;
     private final BeautySalonRepository beautySalonRepository;
+    private final EmployeeAvailableServiceRepository employeeAvailableServiceRepository;
 
-    public EmployeeService(EmployeesRepository employeesRepository, BeautySalonRepository beautySalonRepository) {
+    public EmployeeService(EmployeesRepository employeesRepository, BeautySalonRepository beautySalonRepository,
+                           EmployeeAvailableServiceRepository employeeAvailableServiceRepository) {
         this.employeesRepository = employeesRepository;
         this.beautySalonRepository = beautySalonRepository;
+        this.employeeAvailableServiceRepository = employeeAvailableServiceRepository;
     }
 
     private BeautySalon getCorrespondingBeautySalon(UUID salonId) {
@@ -90,5 +97,22 @@ public class EmployeeService {
         } else {
             throw new ResourceNotFoundException("Employee not found");
         }
+    }
+
+    public EmployeeAvailableService addServiceToEmployee(UUID salonId, UUID employeeId, UUID serviceId,
+                                                         CreateEmployeeAvailableServiceDto createEmployeeAvailableServiceDto) {
+        throw new UnsupportedOperationException();
+    }
+
+    public List<EmployeeAvailableServiceDto> getEmployeeServiceList(UUID salonId, UUID employeeId) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void deleteEmployeeService(UUID salonId, UUID employeeId, UUID serviceId) {
+        throw new UnsupportedOperationException();
+    }
+
+    public EmployeeAvailableService updateEmployeeService(UUID salonId, UUID employeeId, UUID serviceId, CreateEmployeeAvailableServiceDto createEmployeeAvailableServiceDto) {
+        throw new UnsupportedOperationException();
     }
 }

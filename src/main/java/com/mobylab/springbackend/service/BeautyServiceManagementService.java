@@ -39,8 +39,6 @@ public class BeautyServiceManagementService {
                         service -> new BeautyServiceDto()
                                 .setName(service.getName())
                                 .setDescription(service.getDescription())
-                                .setDuration(service.getDuration())
-                                .setPrice(service.getPrice())
                 ).collect(Collectors.toList())
         ).orElse(Collections.emptyList());
 
@@ -54,8 +52,6 @@ public class BeautyServiceManagementService {
         return beautyService.map(service -> new BeautyServiceDto()
                 .setName(service.getName())
                 .setDescription(service.getDescription())
-                .setDuration(service.getDuration())
-                .setPrice(service.getPrice())
         ).orElseThrow(() -> new ResourceNotFoundException("Beauty service not found"));
     }
 
@@ -65,8 +61,6 @@ public class BeautyServiceManagementService {
         BeautyService beautyService = new BeautyService();
         beautyService.setName(beautyServiceDto.getName());
         beautyService.setDescription(beautyServiceDto.getDescription());
-        beautyService.setDuration(beautyServiceDto.getDuration());
-        beautyService.setPrice(beautyServiceDto.getPrice());
         beautyService.setBeautySalon(beautySalon);
 
         return beautyServiceRepository.save(beautyService);
@@ -92,8 +86,6 @@ public class BeautyServiceManagementService {
             BeautyService serviceToUpdate = beautyService.get();
             serviceToUpdate.setName(beautyServiceDto.getName());
             serviceToUpdate.setDescription(beautyServiceDto.getDescription());
-            serviceToUpdate.setDuration(beautyServiceDto.getDuration());
-            serviceToUpdate.setPrice(beautyServiceDto.getPrice());
 
             return beautyServiceRepository.save(serviceToUpdate);
         } else {
