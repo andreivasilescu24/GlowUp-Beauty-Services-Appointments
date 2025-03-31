@@ -1,10 +1,12 @@
 package com.mobylab.springbackend.service;
 
 import com.mobylab.springbackend.entity.BeautySalon;
+import com.mobylab.springbackend.entity.BeautyService;
 import com.mobylab.springbackend.entity.Employee;
 import com.mobylab.springbackend.entity.EmployeeAvailableService;
 import com.mobylab.springbackend.exception.ResourceNotFoundException;
 import com.mobylab.springbackend.repository.BeautySalonRepository;
+import com.mobylab.springbackend.repository.BeautyServiceRepository;
 import com.mobylab.springbackend.repository.EmployeeAvailableServiceRepository;
 import com.mobylab.springbackend.repository.EmployeesRepository;
 import com.mobylab.springbackend.service.dto.CreateEmployeeAvailableServiceDto;
@@ -25,16 +27,25 @@ public class EmployeeService {
     private final EmployeesRepository employeesRepository;
     private final BeautySalonRepository beautySalonRepository;
     private final EmployeeAvailableServiceRepository employeeAvailableServiceRepository;
+    private final BeautyServiceRepository beautyServiceRepository;
+
 
     public EmployeeService(EmployeesRepository employeesRepository, BeautySalonRepository beautySalonRepository,
-                           EmployeeAvailableServiceRepository employeeAvailableServiceRepository) {
+                           EmployeeAvailableServiceRepository employeeAvailableServiceRepository,
+                           BeautyServiceRepository beautyServiceRepository) {
         this.employeesRepository = employeesRepository;
         this.beautySalonRepository = beautySalonRepository;
         this.employeeAvailableServiceRepository = employeeAvailableServiceRepository;
+        this.beautyServiceRepository = beautyServiceRepository;
     }
 
     private BeautySalon getCorrespondingBeautySalon(UUID salonId) {
         return beautySalonRepository.getBeautySalonById(salonId).orElseThrow(() -> new ResourceNotFoundException("Beauty salon not found"));
+    }
+
+    private BeautyService getBeautyServiceById(UUID serviceId) {
+        return beautyServiceRepository.getBeautyServiceById(serviceId).orElseThrow(() ->
+                new ResourceNotFoundException("Selected beauty service doesn't exist"));
     }
 
     public List<EmployeeDto> getEmployeesBySalonId(UUID salonId) {
@@ -101,12 +112,41 @@ public class EmployeeService {
 
     public EmployeeAvailableService addServiceToEmployee(UUID salonId, UUID employeeId, UUID serviceId,
                                                          CreateEmployeeAvailableServiceDto createEmployeeAvailableServiceDto) {
-        throw new UnsupportedOperationException();
+        BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
+        BeautyService beautyService = getBeautyServiceById(serviceId);
+
+        Optional<Employee> employee = employeesRepository.getEmployeeByBeautySalonAndId(beautySalon, employeeId);
+        if (employee.isPresent()) {
+            EmployeeAvailableService.EmployeeAvailableServiceId employeeAvailableServiceId =
+                    new EmployeeAvailableService.EmployeeAvailableServiceId(employeeId, serviceId);
+            EmployeeAvailableService employeeAvailableService = new EmployeeAvailableService(employee.get(), beautyService,
+                    createEmployeeAvailableServiceDto.getPrice(),
+                    createEmployeeAvailableServiceDto.getDuration());
+            return employeeAvailableServiceRepository.save(employeeAvailableService);
+        } else {
+            throw new ResourceNotFoundException("Employee not found or doesn't work at the selected salon");
+        }
     }
 
     public List<EmployeeAvailableServiceDto> getEmployeeServiceList(UUID salonId, UUID employeeId) {
-        throw new UnsupportedOperationException();
+        BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
+        Optional<Employee> employee = employeesRepository.getEmployeeByBeautySalonAndId(beautySalon, employeeId);
+
+        if (employee.isPresent()) {
+            Optional<List<EmployeeAvailableService>> employeeAvailableServices = employeeAvailableServiceRepository.findEmployeeServiceById_EmployeeId(employeeId);
+
+            return employeeAvailableServices.map(employeeAvailableServices1 ->
+                    employeeAvailableServices1.stream().map(employeeService -> new EmployeeAvailableServiceDto()
+                            .setDuration(employeeService.getDuration())
+                            .setPrice(employeeService.getPrice())
+                            .setServiceName(employeeService.getService().getName())
+                            .setDescription(employeeService.getService().getDescription())).collect(Collectors.toList()))
+                    .orElse(Collections.emptyList());
+        } else {
+            throw new ResourceNotFoundException("Employee not found or doesn't work at the selected salon");
+        }
     }
+
 
     public void deleteEmployeeService(UUID salonId, UUID employeeId, UUID serviceId) {
         throw new UnsupportedOperationException();
