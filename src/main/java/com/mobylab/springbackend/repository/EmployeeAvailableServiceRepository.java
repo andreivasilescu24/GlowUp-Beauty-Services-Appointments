@@ -10,5 +10,6 @@ import java.util.UUID;
 public interface EmployeeAvailableServiceRepository extends JpaRepository<EmployeeAvailableService, EmployeeAvailableService.EmployeeAvailableServiceId> {
     Optional<List<EmployeeAvailableService>> findEmployeeServicesById_ServiceId(UUID idServiceId);
     Optional<List<EmployeeAvailableService>> findEmployeeServiceById_EmployeeId(UUID idEmployeeId);
-    Optional<List<EmployeeAvailableService>> findEmployeeServicesById(EmployeeAvailableService.EmployeeAvailableServiceId id);
+
+    Optional<EmployeeAvailableService> findEmployeeAvailableServiceById(EmployeeAvailableService.EmployeeAvailableServiceId id);
 }

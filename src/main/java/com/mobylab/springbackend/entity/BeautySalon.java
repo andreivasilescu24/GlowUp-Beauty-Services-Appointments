@@ -18,6 +18,10 @@ public class BeautySalon {
     private int numEmployees;
     private String city;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category categoryId;
+
     public UUID getId() {
         return id;
     }
@@ -72,5 +76,13 @@ public class BeautySalon {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public Category getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Category categoryId) {
+        this.categoryId = categoryId;
     }
 }

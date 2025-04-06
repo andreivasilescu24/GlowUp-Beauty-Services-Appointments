@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/beautySalon/{salon_id}/employees")
-public class EmployeesController {
+public class EmployeesController implements SecuredRestController {
     private final com.mobylab.springbackend.service.EmployeeService employeeService;
 
     public EmployeesController(com.mobylab.springbackend.service.EmployeeService employeeService) {
