@@ -2,7 +2,7 @@ package com.mobylab.springbackend.controller;
 
 import com.mobylab.springbackend.entity.BeautyService;
 import com.mobylab.springbackend.service.BeautyServiceManagementService;
-import com.mobylab.springbackend.service.dto.BeautyServiceDto;
+import com.mobylab.springbackend.service.dto.beautyservice.BeautyServiceDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

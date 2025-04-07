@@ -5,7 +5,7 @@ import com.mobylab.springbackend.entity.BeautyService;
 import com.mobylab.springbackend.exception.ResourceNotFoundException;
 import com.mobylab.springbackend.repository.BeautySalonRepository;
 import com.mobylab.springbackend.repository.BeautyServiceRepository;
-import com.mobylab.springbackend.service.dto.BeautyServiceDto;
+import com.mobylab.springbackend.service.dto.beautyservice.BeautyServiceDto;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 

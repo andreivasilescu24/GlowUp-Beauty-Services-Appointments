@@ -2,8 +2,8 @@ package com.mobylab.springbackend.controller;
 
 import com.mobylab.springbackend.entity.Category;
 import com.mobylab.springbackend.service.CategoryService;
-import com.mobylab.springbackend.service.dto.CategoryDto;
-import com.mobylab.springbackend.service.dto.CreateCategoryDto;
+import com.mobylab.springbackend.service.dto.category.CategoryDto;
+import com.mobylab.springbackend.service.dto.category.CreateCategoryDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

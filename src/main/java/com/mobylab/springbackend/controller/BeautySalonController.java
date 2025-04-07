@@ -2,8 +2,8 @@ package com.mobylab.springbackend.controller;
 
 import com.mobylab.springbackend.entity.BeautySalon;
 import com.mobylab.springbackend.service.BeautySalonService;
-import com.mobylab.springbackend.service.dto.BeautySalonDto;
-import com.mobylab.springbackend.service.dto.CreateBeautySalonDto;
+import com.mobylab.springbackend.service.dto.beautysalon.BeautySalonDto;
+import com.mobylab.springbackend.service.dto.beautysalon.CreateBeautySalonDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

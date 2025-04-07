@@ -9,9 +9,9 @@ import com.mobylab.springbackend.repository.BeautySalonRepository;
 import com.mobylab.springbackend.repository.BeautyServiceRepository;
 import com.mobylab.springbackend.repository.EmployeeAvailableServiceRepository;
 import com.mobylab.springbackend.repository.EmployeesRepository;
-import com.mobylab.springbackend.service.dto.CreateEmployeeAvailableServiceDto;
-import com.mobylab.springbackend.service.dto.EmployeeAvailableServiceDto;
-import com.mobylab.springbackend.service.dto.EmployeeDto;
+import com.mobylab.springbackend.service.dto.employeeservices.CreateEmployeeAvailableServiceDto;
+import com.mobylab.springbackend.service.dto.employeeservices.EmployeeAvailableServiceDto;
+import com.mobylab.springbackend.service.dto.employee.EmployeeDto;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 

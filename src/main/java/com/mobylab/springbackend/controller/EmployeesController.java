@@ -2,9 +2,10 @@ package com.mobylab.springbackend.controller;
 
 import com.mobylab.springbackend.entity.Employee;
 import com.mobylab.springbackend.entity.EmployeeAvailableService;
-import com.mobylab.springbackend.service.dto.CreateEmployeeAvailableServiceDto;
-import com.mobylab.springbackend.service.dto.EmployeeDto;
-import com.mobylab.springbackend.service.dto.EmployeeAvailableServiceDto;
+import com.mobylab.springbackend.service.EmployeeService;
+import com.mobylab.springbackend.service.dto.employeeservices.CreateEmployeeAvailableServiceDto;
+import com.mobylab.springbackend.service.dto.employee.EmployeeDto;
+import com.mobylab.springbackend.service.dto.employeeservices.EmployeeAvailableServiceDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +15,9 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/beautySalon/{salon_id}/employees")
 public class EmployeesController implements SecuredRestController {
-    private final com.mobylab.springbackend.service.EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
-    public EmployeesController(com.mobylab.springbackend.service.EmployeeService employeeService) {
+    public EmployeesController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
 

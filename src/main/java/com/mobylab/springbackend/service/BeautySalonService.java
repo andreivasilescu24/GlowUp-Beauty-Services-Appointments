@@ -3,12 +3,10 @@ package com.mobylab.springbackend.service;
 import com.mobylab.springbackend.entity.BeautySalon;
 import com.mobylab.springbackend.exception.ResourceNotFoundException;
 import com.mobylab.springbackend.repository.BeautySalonRepository;
-import com.mobylab.springbackend.service.dto.BeautySalonDto;
-import com.mobylab.springbackend.service.dto.CreateBeautySalonDto;
+import com.mobylab.springbackend.service.dto.beautysalon.BeautySalonDto;
+import com.mobylab.springbackend.service.dto.beautysalon.CreateBeautySalonDto;
 import jakarta.transaction.Transactional;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;

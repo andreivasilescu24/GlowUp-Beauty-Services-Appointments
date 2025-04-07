@@ -1,4 +1,4 @@
-package com.mobylab.springbackend.service.dto;
+package com.mobylab.springbackend.service.dto.auth;
 
 import org.springframework.stereotype.Component;
 

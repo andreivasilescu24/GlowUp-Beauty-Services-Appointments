@@ -1,4 +1,4 @@
-package com.mobylab.springbackend.service.dto;
+package com.mobylab.springbackend.service.dto.employeeservices;
 
 public class EmployeeAvailableServiceDto {
     private String serviceName;
