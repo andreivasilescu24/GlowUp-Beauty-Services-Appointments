@@ -4,6 +4,7 @@ import com.mobylab.springbackend.entity.BeautySalon;
 import com.mobylab.springbackend.entity.BeautyService;
 import com.mobylab.springbackend.entity.Employee;
 import com.mobylab.springbackend.entity.EmployeeAvailableService;
+import com.mobylab.springbackend.exception.BadRequestException;
 import com.mobylab.springbackend.exception.ResourceNotFoundException;
 import com.mobylab.springbackend.repository.BeautySalonRepository;
 import com.mobylab.springbackend.repository.BeautyServiceRepository;
@@ -46,6 +47,22 @@ public class EmployeeService {
     private BeautyService getBeautyServiceById(UUID serviceId) {
         return beautyServiceRepository.getBeautyServiceById(serviceId).orElseThrow(() ->
                 new ResourceNotFoundException("Selected beauty service doesn't exist"));
+    }
+
+    private void checkDurationValidity(int serviceDuration) {
+        if (serviceDuration <= 0) {
+            throw new BadRequestException("Service duration must be greater than zero");
+        }
+
+        if (serviceDuration % 10 != 0) {
+            throw new BadRequestException("Service duration must be a multiple of 5");
+        }
+    }
+
+    private void checkPriceValidity(double price) {
+        if (price < 0) {
+            throw new BadRequestException("Service price cannot be negative");
+        }
     }
 
     public List<EmployeeDto> getEmployeesBySalonId(UUID salonId) {
@@ -117,11 +134,20 @@ public class EmployeeService {
 
         Optional<Employee> employee = employeesRepository.getEmployeeByBeautySalonAndId(beautySalon, employeeId);
         if (employee.isPresent()) {
+            int serviceDuration = createEmployeeAvailableServiceDto.getDuration();
+            double servicePrice = createEmployeeAvailableServiceDto.getPrice();
+
+            checkDurationValidity(serviceDuration);
+            checkPriceValidity(servicePrice);
+
             EmployeeAvailableService.EmployeeAvailableServiceId employeeAvailableServiceId =
                     new EmployeeAvailableService.EmployeeAvailableServiceId(employeeId, serviceId);
-            EmployeeAvailableService employeeAvailableService = new EmployeeAvailableService(employee.get(), beautyService,
-                    createEmployeeAvailableServiceDto.getPrice(),
-                    createEmployeeAvailableServiceDto.getDuration());
+            EmployeeAvailableService employeeAvailableService =
+                    new EmployeeAvailableService(
+                            employee.get(),
+                            beautyService,
+                            servicePrice,
+                            serviceDuration);
             return employeeAvailableServiceRepository.save(employeeAvailableService);
         } else {
             throw new ResourceNotFoundException("Employee not found or doesn't work at the selected salon");
@@ -178,9 +204,15 @@ public class EmployeeService {
                 Optional<EmployeeAvailableService> employeeAvailableService = employeeAvailableServiceRepository
                         .findEmployeeAvailableServiceById(new EmployeeAvailableService.EmployeeAvailableServiceId(employeeId, serviceId));
                 if (employeeAvailableService.isPresent()) {
+                    int serviceDuration = createEmployeeAvailableServiceDto.getDuration();
+                    double servicePrice = createEmployeeAvailableServiceDto.getPrice();
+
+                    checkDurationValidity(serviceDuration);
+                    checkPriceValidity(servicePrice);
+
                     EmployeeAvailableService existingEmployeeAvailableService = employeeAvailableService.get();
-                    existingEmployeeAvailableService.setPrice(createEmployeeAvailableServiceDto.getPrice());
-                    existingEmployeeAvailableService.setDuration(createEmployeeAvailableServiceDto.getDuration());
+                    existingEmployeeAvailableService.setPrice(servicePrice);
+                    existingEmployeeAvailableService.setDuration(serviceDuration);
                     return employeeAvailableServiceRepository.save(existingEmployeeAvailableService);
                 } else {
                     throw new ResourceNotFoundException("Service was not found for this employee");

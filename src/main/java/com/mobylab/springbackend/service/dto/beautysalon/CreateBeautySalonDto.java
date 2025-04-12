@@ -1,5 +1,7 @@
 package com.mobylab.springbackend.service.dto.beautysalon;
 
+import java.util.UUID;
+
 public class CreateBeautySalonDto {
     private String name;
     private String address;
@@ -7,6 +9,7 @@ public class CreateBeautySalonDto {
     private String phone;
     private int numEmployees;
     private String city;
+    private UUID categoryId;
 
     public String getName() {
         return name;
@@ -60,6 +63,15 @@ public class CreateBeautySalonDto {
 
     public CreateBeautySalonDto setCity(String city) {
         this.city = city;
+        return this;
+    }
+
+    public UUID getCategoryId() {
+        return categoryId;
+    }
+
+    public CreateBeautySalonDto setCategoryId(UUID categoryId) {
+        this.categoryId = categoryId;
         return this;
     }
 }

@@ -2,7 +2,9 @@ package com.mobylab.springbackend.controller;
 
 import com.mobylab.springbackend.entity.Review;
 import com.mobylab.springbackend.service.ReviewService;
+import com.mobylab.springbackend.service.dto.review.CreateReviewDto;
 import com.mobylab.springbackend.service.dto.review.ReviewDto;
+import com.mobylab.springbackend.service.dto.review.UpdateReviewDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/beautySalon/{salonId}/reviews")
-public class ReviewController {
+public class ReviewController implements SecuredRestController {
     private final ReviewService reviewService;
 
     public ReviewController(ReviewService reviewService) {
@@ -25,21 +27,23 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<Review> addReview(@RequestBody ReviewDto reviewDto) {
-        Review createdReview = reviewService.addReview(reviewDto);
+    public ResponseEntity<Review> addReview(@PathVariable UUID salonId, @RequestBody CreateReviewDto createReviewDto) {
+        Review createdReview = reviewService.addReview(salonId, createReviewDto);
         return ResponseEntity.status(201).body(createdReview);
     }
 
     @PutMapping("/{reviewId}")
-    public ResponseEntity<Review> updateReview(@PathVariable UUID salonId, @PathVariable UUID reviewId, @RequestBody ReviewDto reviewDto) {
-        Review updatedReview = reviewService.updateReview(salonId, reviewId, reviewDto);
+    public ResponseEntity<Review> updateReview(@PathVariable UUID salonId,
+                                               @PathVariable UUID reviewId,
+                                               @RequestBody UpdateReviewDto updateReviewDto) {
+        Review updatedReview = reviewService.updateReview(salonId, reviewId, updateReviewDto);
         return ResponseEntity.status(200).body(updatedReview);
     }
 
     @DeleteMapping("/{reviewId}")
-    public ResponseEntity<String> deleteReview(@PathVariable UUID salonId, @PathVariable UUID reviewId) {
+    public ResponseEntity<String> deleteReview(@PathVariable UUID salonId,
+                                               @PathVariable UUID reviewId) {
         reviewService.deleteReview(salonId, reviewId);
         return ResponseEntity.noContent().build();
     }
-
 }

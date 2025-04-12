@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
-    @Value("false")
+    @Value("true")
     private boolean securityEnabled;
 
     private JwtAuthEntryPoint authEntryPoint;

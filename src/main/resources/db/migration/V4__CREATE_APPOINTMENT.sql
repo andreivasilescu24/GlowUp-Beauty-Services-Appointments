@@ -11,5 +11,6 @@ CREATE TABLE appointment
     appointment_time TIMESTAMP                                                                NOT NULL,
     status           TEXT CHECK (status IN ('Pending', 'Confirmed', 'Completed', 'Canceled')) NOT NULL,
     FOREIGN KEY (salon_id) REFERENCES beauty_salon (id) ON DELETE CASCADE,
-    FOREIGN KEY (employee_id, service_id) REFERENCES employee_services (employee_id, service_id) ON DELETE CASCADE
+    FOREIGN KEY (employee_id, service_id) REFERENCES employee_services (employee_id, service_id) ON DELETE CASCADE,
+    FOREIGN KEY (client_id) REFERENCES users (id) ON DELETE CASCADE
 );

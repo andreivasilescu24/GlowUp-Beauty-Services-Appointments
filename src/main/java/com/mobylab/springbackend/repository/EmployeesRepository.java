@@ -13,4 +13,6 @@ import java.util.Optional;
 public interface EmployeesRepository extends JpaRepository<Employee, UUID> {
     Optional<List<Employee>> getEmployeesByBeautySalon(BeautySalon beautySalon);
     Optional<Employee> getEmployeeByBeautySalonAndId(BeautySalon beautySalon, UUID employeeId);
+
+    Optional<Employee> findByBeautySalonAndId(BeautySalon beautySalon, UUID id);
 }

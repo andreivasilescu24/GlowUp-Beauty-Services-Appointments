@@ -1,8 +1,10 @@
 package com.mobylab.springbackend.service;
 
 import com.mobylab.springbackend.entity.BeautySalon;
+import com.mobylab.springbackend.entity.Category;
 import com.mobylab.springbackend.exception.ResourceNotFoundException;
 import com.mobylab.springbackend.repository.BeautySalonRepository;
+import com.mobylab.springbackend.repository.CategoryRepository;
 import com.mobylab.springbackend.service.dto.beautysalon.BeautySalonDto;
 import com.mobylab.springbackend.service.dto.beautysalon.CreateBeautySalonDto;
 import jakarta.transaction.Transactional;
@@ -17,9 +19,12 @@ import java.util.stream.Collectors;
 @Transactional
 public class BeautySalonService {
     private final BeautySalonRepository beautySalonRepository;
+    private final CategoryRepository categoryRepository;
 
-    public BeautySalonService(BeautySalonRepository beautySalonRepository) {
+    public BeautySalonService(BeautySalonRepository beautySalonRepository,
+                              CategoryRepository categoryRepository) {
         this.beautySalonRepository = beautySalonRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<BeautySalonDto> getBeautySalons() {
@@ -54,6 +59,9 @@ public class BeautySalonService {
     }
 
     public BeautySalon addBeautySalon(CreateBeautySalonDto beautySalonDto) {
+        Category category = categoryRepository.findById(beautySalonDto.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+
         BeautySalon beautySalon = new BeautySalon();
         beautySalon.setName(beautySalonDto.getName());
         beautySalon.setCity(beautySalonDto.getCity());
@@ -61,6 +69,7 @@ public class BeautySalonService {
         beautySalon.setEmail(beautySalonDto.getEmail());
         beautySalon.setPhone(beautySalonDto.getPhone());
         beautySalon.setNumEmployees(beautySalonDto.getNumEmployees());
+        beautySalon.setCategory(category);
 
         return beautySalonRepository.save(beautySalon);
     }
@@ -73,6 +82,9 @@ public class BeautySalonService {
     }
 
     public BeautySalon updateBeautySalon(UUID id, CreateBeautySalonDto beautySalonDto) {
+        Category category = categoryRepository.findById(beautySalonDto.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+
         BeautySalon beautySalon = beautySalonRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Beauty salon not found"));
 
@@ -82,6 +94,7 @@ public class BeautySalonService {
         beautySalon.setEmail(beautySalonDto.getEmail());
         beautySalon.setPhone(beautySalonDto.getPhone());
         beautySalon.setNumEmployees(beautySalonDto.getNumEmployees());
+        beautySalon.setCategory(category);
 
         return beautySalonRepository.save(beautySalon);
     }
