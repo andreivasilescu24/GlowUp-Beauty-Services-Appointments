@@ -22,6 +22,10 @@ public class BeautySalon {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
+
     public UUID getId() {
         return id;
     }
@@ -84,5 +88,13 @@ public class BeautySalon {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 }

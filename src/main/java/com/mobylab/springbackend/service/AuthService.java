@@ -34,7 +34,6 @@ public class AuthService {
     private RoleRepository roleRepository;
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private JwtGenerator jwtGenerator;
 
@@ -45,8 +44,14 @@ public class AuthService {
             throw new BadRequestException("Email is already used");
         }
 
+        String roleName = registerDto.getRole().toUpperCase();
+
+        if (!roleName.equals("USER") && !roleName.equals("OWNER")) {
+            throw new BadRequestException("Invalid role. Allowed roles are USER or OWNER.");
+        }
+
         List<Role> roleList = new ArrayList<>();
-        roleList.add(roleRepository.findRoleByName("USER").get());
+        roleList.add(roleRepository.findRoleByName(roleName).get());
 
         userRepository.save(new User()
                 .setEmail(registerDto.getEmail())

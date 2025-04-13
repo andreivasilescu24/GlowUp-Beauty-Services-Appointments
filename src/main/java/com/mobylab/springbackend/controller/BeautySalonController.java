@@ -7,6 +7,7 @@ import com.mobylab.springbackend.service.dto.beautysalon.CreateBeautySalonDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,12 +36,14 @@ public class BeautySalonController implements SecuredRestController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OWNER')")
     public ResponseEntity<BeautySalonDto> addBeautySalon(@RequestBody CreateBeautySalonDto beautySalonDto) {
         BeautySalonDto beautySalon = beautySalonService.addBeautySalon(beautySalonDto);
         return ResponseEntity.status(201).body(beautySalon);
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OWNER')")
     public ResponseEntity<String> deleteBeautySalon(@PathVariable UUID id) {
         logger.info("Request to delete a salon with id: " + id);
         beautySalonService.deleteBeautySalon(id);
@@ -49,6 +52,7 @@ public class BeautySalonController implements SecuredRestController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OWNER')")
     public ResponseEntity<BeautySalonDto> updateBeautySalon(@PathVariable UUID id, @RequestBody CreateBeautySalonDto beautySalonDto) {
         BeautySalonDto beautySalon = beautySalonService.updateBeautySalon(id, beautySalonDto);
         return ResponseEntity.status(200).body(beautySalon);

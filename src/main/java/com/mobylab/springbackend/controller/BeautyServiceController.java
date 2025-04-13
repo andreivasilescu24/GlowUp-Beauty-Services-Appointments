@@ -5,6 +5,7 @@ import com.mobylab.springbackend.service.BeautyServiceManagementService;
 import com.mobylab.springbackend.service.dto.beautyservice.BeautyServiceDto;
 import com.mobylab.springbackend.service.dto.beautyservice.CreateBeautyServiceDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,18 +33,21 @@ public class BeautyServiceController implements SecuredRestController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OWNER')")
     public ResponseEntity<BeautyServiceDto> addBeautyService(@PathVariable UUID salonId, @RequestBody CreateBeautyServiceDto createBeautyServiceDto) {
         BeautyServiceDto createdBeautyService = beautyServiceManagementService.addBeautyService(salonId, createBeautyServiceDto);
         return ResponseEntity.status(201).body(createdBeautyService);
     }
 
     @DeleteMapping("/delete/{serviceId}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OWNER')")
     public ResponseEntity<String> deleteBeautyService(@PathVariable UUID salonId, @PathVariable UUID serviceId) {
         beautyServiceManagementService.deleteBeautyService(salonId, serviceId);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update/{serviceId}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OWNER')")
     public ResponseEntity<BeautyServiceDto> updateBeautyService(@PathVariable UUID salonId, @PathVariable UUID serviceId, @RequestBody CreateBeautyServiceDto createBeautyServiceDto) {
         BeautyServiceDto updatedBeautyService = beautyServiceManagementService.updateBeautyService(salonId, serviceId,  createBeautyServiceDto);
         return ResponseEntity.status(200).body(updatedBeautyService);

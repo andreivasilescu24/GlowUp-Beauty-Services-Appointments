@@ -6,14 +6,12 @@ import com.mobylab.springbackend.entity.Employee;
 import com.mobylab.springbackend.entity.EmployeeAvailableService;
 import com.mobylab.springbackend.exception.BadRequestException;
 import com.mobylab.springbackend.exception.ResourceNotFoundException;
-import com.mobylab.springbackend.repository.BeautySalonRepository;
-import com.mobylab.springbackend.repository.BeautyServiceRepository;
-import com.mobylab.springbackend.repository.EmployeeAvailableServiceRepository;
-import com.mobylab.springbackend.repository.EmployeesRepository;
+import com.mobylab.springbackend.repository.*;
 import com.mobylab.springbackend.service.dto.employee.CreateEmployeeDto;
 import com.mobylab.springbackend.service.dto.employeeservices.CreateEmployeeAvailableServiceDto;
 import com.mobylab.springbackend.service.dto.employeeservices.EmployeeAvailableServiceDto;
 import com.mobylab.springbackend.service.dto.employee.EmployeeDto;
+import com.mobylab.springbackend.util.OwnershipUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -30,15 +28,18 @@ public class EmployeeService {
     private final BeautySalonRepository beautySalonRepository;
     private final EmployeeAvailableServiceRepository employeeAvailableServiceRepository;
     private final BeautyServiceRepository beautyServiceRepository;
+    private final UserRepository userRepository;
 
 
     public EmployeeService(EmployeesRepository employeesRepository, BeautySalonRepository beautySalonRepository,
                            EmployeeAvailableServiceRepository employeeAvailableServiceRepository,
-                           BeautyServiceRepository beautyServiceRepository) {
+                           BeautyServiceRepository beautyServiceRepository,
+                           UserRepository userRepository) {
         this.employeesRepository = employeesRepository;
         this.beautySalonRepository = beautySalonRepository;
         this.employeeAvailableServiceRepository = employeeAvailableServiceRepository;
         this.beautyServiceRepository = beautyServiceRepository;
+        this.userRepository = userRepository;
     }
 
     private BeautySalon getCorrespondingBeautySalon(UUID salonId) {
@@ -98,6 +99,8 @@ public class EmployeeService {
 
     public EmployeeDto addSalonEmployee(UUID salonId, CreateEmployeeDto createEmployeeDto) {
         BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
+
+        OwnershipUtils.checkSalonOwnership(beautySalon, userRepository);
         Employee employee = new Employee();
         employee.setExperience(createEmployeeDto.getExperience());
         employee.setBeautySalon(beautySalon);
@@ -116,6 +119,9 @@ public class EmployeeService {
 
     public void deleteSalonEmployee(UUID salonId, UUID employeeId) {
         BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
+
+        OwnershipUtils.checkSalonOwnership(beautySalon, userRepository);
+
         Optional<Employee> employee = employeesRepository.getEmployeeByBeautySalonAndId(beautySalon, employeeId);
         if (employee.isPresent()) {
             employeesRepository.delete(employee.get());
@@ -126,6 +132,8 @@ public class EmployeeService {
 
     public EmployeeDto updateSalonEmployee(UUID salonId, UUID employeeId, CreateEmployeeDto createEmployeeDto) {
         BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
+
+        OwnershipUtils.checkSalonOwnership(beautySalon, userRepository);
 
         Optional<Employee> employee = employeesRepository.getEmployeeByBeautySalonAndId(beautySalon, employeeId);
         if (employee.isPresent()) {
@@ -149,6 +157,8 @@ public class EmployeeService {
     public EmployeeAvailableServiceDto addServiceToEmployee(UUID salonId, UUID employeeId, UUID serviceId,
                                                          CreateEmployeeAvailableServiceDto createEmployeeAvailableServiceDto) {
         BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
+        OwnershipUtils.checkSalonOwnership(beautySalon, userRepository);
+
         BeautyService beautyService = getBeautyServiceById(serviceId);
 
         Optional<Employee> employee = employeesRepository.getEmployeeByBeautySalonAndId(beautySalon, employeeId);
@@ -205,6 +215,8 @@ public class EmployeeService {
 
     public void deleteEmployeeService(UUID salonId, UUID employeeId, UUID serviceId) {
         BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
+        OwnershipUtils.checkSalonOwnership(beautySalon, userRepository);
+
         Optional<Employee> employee = employeesRepository.getEmployeeByBeautySalonAndId(beautySalon, employeeId);
         if (employee.isPresent()) {
             Optional<BeautyService> beautyService = beautyServiceRepository.getBeautyServiceById(serviceId);
@@ -226,6 +238,8 @@ public class EmployeeService {
 
     public EmployeeAvailableServiceDto updateEmployeeService(UUID salonId, UUID employeeId, UUID serviceId, CreateEmployeeAvailableServiceDto createEmployeeAvailableServiceDto) {
         BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
+        OwnershipUtils.checkSalonOwnership(beautySalon, userRepository);
+
         Optional<Employee> employee = employeesRepository.getEmployeeByBeautySalonAndId(beautySalon, employeeId);
         if (employee.isPresent()) {
             Optional<BeautyService> beautyService = beautyServiceRepository.getBeautyServiceById(serviceId);

@@ -5,9 +5,11 @@ import com.mobylab.springbackend.entity.WorkingHours;
 import com.mobylab.springbackend.exception.BadRequestException;
 import com.mobylab.springbackend.exception.ResourceNotFoundException;
 import com.mobylab.springbackend.repository.EmployeesRepository;
+import com.mobylab.springbackend.repository.UserRepository;
 import com.mobylab.springbackend.repository.WorkingHoursRepository;
 import com.mobylab.springbackend.service.dto.workinghours.CreateWorkingHoursDto;
 import com.mobylab.springbackend.service.dto.workinghours.WorkingHoursDto;
+import com.mobylab.springbackend.util.OwnershipUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +25,12 @@ import java.util.stream.Collectors;
 public class WorkingHoursService {
     private final WorkingHoursRepository workingHoursRepository;
     private final EmployeesRepository employeesRepository;
+    private final UserRepository userRepository;
 
-    public WorkingHoursService(WorkingHoursRepository workingHoursRepository, EmployeesRepository employeesRepository) {
+    public WorkingHoursService(WorkingHoursRepository workingHoursRepository, EmployeesRepository employeesRepository, UserRepository userRepository) {
         this.workingHoursRepository = workingHoursRepository;
         this.employeesRepository = employeesRepository;
+        this.userRepository = userRepository;
     }
 
     private void checkHoursValability(LocalTime startTime, LocalTime endTime) {
@@ -77,6 +81,9 @@ public class WorkingHoursService {
 
     public WorkingHoursDto addEmployeeWorkingHours(UUID employeeId, CreateWorkingHoursDto createWorkingHoursDto) {
         Employee employee = employeesRepository.findById(employeeId).orElse(null);
+
+        OwnershipUtils.checkEmployeeBelongsToOwnerSalon(employee, userRepository);
+
         if (employee == null) {
             throw new ResourceNotFoundException("Employee not found");
         }
@@ -106,6 +113,9 @@ public class WorkingHoursService {
 
     public WorkingHoursDto updateEmployeeWorkingHours(UUID employeeId, UUID workingHoursId, CreateWorkingHoursDto createWorkingHoursDto) {
         Employee employee = employeesRepository.findById(employeeId).orElse(null);
+
+        OwnershipUtils.checkEmployeeBelongsToOwnerSalon(employee, userRepository);
+
         if (employee == null) {
             throw new ResourceNotFoundException("Employee not found");
         }
@@ -138,6 +148,9 @@ public class WorkingHoursService {
 
     public void deleteEmployeeWorkingHours(UUID employeeId, UUID workingHoursId) {
         Employee employee = employeesRepository.findById(employeeId).orElse(null);
+
+        OwnershipUtils.checkEmployeeBelongsToOwnerSalon(employee, userRepository);
+
         if (employee == null) {
             throw new ResourceNotFoundException("Employee not found");
         }

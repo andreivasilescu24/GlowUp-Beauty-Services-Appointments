@@ -8,6 +8,7 @@ import com.mobylab.springbackend.service.dto.employeeservices.CreateEmployeeAvai
 import com.mobylab.springbackend.service.dto.employee.EmployeeDto;
 import com.mobylab.springbackend.service.dto.employeeservices.EmployeeAvailableServiceDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,18 +36,21 @@ public class EmployeesController implements SecuredRestController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OWNER')")
     public ResponseEntity<EmployeeDto> addEmployee(@PathVariable UUID salon_id, @RequestBody CreateEmployeeDto createEmployeeDto) {
         EmployeeDto createdEmployee = employeeService.addSalonEmployee(salon_id, createEmployeeDto);
         return ResponseEntity.status(201).body(createdEmployee);
     }
 
     @DeleteMapping("/{employee_id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OWNER')")
     public ResponseEntity<Void> deleteEmployee(@PathVariable UUID salon_id, @PathVariable UUID employee_id) {
         employeeService.deleteSalonEmployee(salon_id, employee_id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{employee_id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OWNER')")
     public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable UUID salon_id,
                                                    @PathVariable UUID employee_id,
                                                    @RequestBody CreateEmployeeDto createEmployeeDto) {
@@ -73,6 +77,7 @@ public class EmployeesController implements SecuredRestController {
     }
 
     @DeleteMapping("/{employee_id}/services/{service_id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OWNER')")
     public ResponseEntity<String> deleteEmployeeService(@PathVariable UUID salon_id,
                                                         @PathVariable UUID employee_id,
                                                         @PathVariable UUID service_id) {
@@ -81,6 +86,7 @@ public class EmployeesController implements SecuredRestController {
     }
 
     @PutMapping("/{employee_id}/services/{service_id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OWNER')")
     public ResponseEntity<EmployeeAvailableServiceDto> updateEmployeeService(@PathVariable UUID salon_id,
                                                                           @PathVariable UUID employee_id,
                                                                           @PathVariable UUID service_id,

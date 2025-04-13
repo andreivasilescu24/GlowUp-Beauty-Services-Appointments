@@ -8,6 +8,7 @@ public class RegisterDto {
     private String email;
     private String username;
     private String password;
+    private String role;
 
     public String getEmail() {
         return email;
@@ -33,6 +34,15 @@ public class RegisterDto {
 
     public RegisterDto setPassword(String password) {
         this.password = password;
+        return this;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public RegisterDto setRole(String role) {
+        this.role = role;
         return this;
     }
 }

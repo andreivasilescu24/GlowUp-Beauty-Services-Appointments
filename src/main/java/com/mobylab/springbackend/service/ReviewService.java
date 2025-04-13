@@ -10,6 +10,7 @@ import com.mobylab.springbackend.repository.UserRepository;
 import com.mobylab.springbackend.service.dto.review.CreateReviewDto;
 import com.mobylab.springbackend.service.dto.review.ReviewDto;
 import com.mobylab.springbackend.service.dto.review.UpdateReviewDto;
+import com.mobylab.springbackend.util.OwnershipUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -79,6 +80,8 @@ public class ReviewService {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
 
+        OwnershipUtils.checkReviewOwnership(review, userRepository);
+
         if (!review.getBeautySalon().getId().equals(salonId)) {
             throw new ResourceNotFoundException("Review does not belong to this salon");
         }
@@ -99,6 +102,8 @@ public class ReviewService {
     public void deleteReview(UUID salonId, UUID reviewId) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
+
+        OwnershipUtils.checkReviewOwnership(review, userRepository);
 
         if (!review.getBeautySalon().getId().equals(salonId)) {
             throw new ResourceNotFoundException("Review does not belong to this salon");

@@ -1,11 +1,11 @@
 CREATE SCHEMA project;
 SET search_path = project, pg_catalog;
 
-CREATE SEQUENCE roles_seq START WITH 5 INCREMENT BY 1;
+CREATE SEQUENCE roles_seq START WITH 4 INCREMENT BY 1;
 
 CREATE TABLE users (
     id uuid,
-    username text,
+    name text,
     email text,
     password text,
     PRIMARY KEY (id)
@@ -29,7 +29,6 @@ INSERT INTO roles (id, name)
 VALUES
 (1, 'ADMIN'),
 (2, 'USER'),
-(3, 'OWNER'),
-(4, 'EMPLOYEE')
+(3, 'OWNER')
 
 

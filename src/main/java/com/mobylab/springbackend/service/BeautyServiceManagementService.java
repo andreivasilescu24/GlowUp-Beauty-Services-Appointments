@@ -2,12 +2,17 @@ package com.mobylab.springbackend.service;
 
 import com.mobylab.springbackend.entity.BeautySalon;
 import com.mobylab.springbackend.entity.BeautyService;
+import com.mobylab.springbackend.entity.User;
 import com.mobylab.springbackend.exception.ResourceNotFoundException;
 import com.mobylab.springbackend.repository.BeautySalonRepository;
 import com.mobylab.springbackend.repository.BeautyServiceRepository;
+import com.mobylab.springbackend.repository.UserRepository;
 import com.mobylab.springbackend.service.dto.beautyservice.BeautyServiceDto;
 import com.mobylab.springbackend.service.dto.beautyservice.CreateBeautyServiceDto;
+import com.mobylab.springbackend.util.OwnershipUtils;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -21,11 +26,14 @@ import java.util.stream.Collectors;
 public class BeautyServiceManagementService {
     private final BeautyServiceRepository beautyServiceRepository;
     private final BeautySalonRepository beautySalonRepository;
+    private final UserRepository userRepository;
 
     public BeautyServiceManagementService(BeautyServiceRepository beautyServiceRepository,
-                                          BeautySalonRepository beautySalonRepository) {
+                                          BeautySalonRepository beautySalonRepository,
+                                          UserRepository userRepository) {
         this.beautyServiceRepository = beautyServiceRepository;
         this.beautySalonRepository = beautySalonRepository;
+        this.userRepository = userRepository;
     }
 
     private BeautySalon getCorrespondingBeautySalon(UUID salonId) {
@@ -59,6 +67,8 @@ public class BeautyServiceManagementService {
     public BeautyServiceDto addBeautyService(UUID salonId, CreateBeautyServiceDto createBeautyServiceDto) {
         BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
 
+        OwnershipUtils.checkSalonOwnership(beautySalon, userRepository);
+
         BeautyService beautyService = new BeautyService();
         beautyService.setName(createBeautyServiceDto.getName());
         beautyService.setDescription(createBeautyServiceDto.getDescription());
@@ -75,6 +85,8 @@ public class BeautyServiceManagementService {
     public void deleteBeautyService(UUID salonId, UUID serviceId) {
         BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
 
+        OwnershipUtils.checkSalonOwnership(beautySalon, userRepository);
+
         Optional<BeautyService> beautyService = beautyServiceRepository.getBeautyServiceByIdAndBeautySalon(serviceId, beautySalon);
 
         if (beautyService.isPresent()) {
@@ -86,6 +98,8 @@ public class BeautyServiceManagementService {
 
     public BeautyServiceDto updateBeautyService(UUID salonId, UUID serviceId, CreateBeautyServiceDto createBeautyServiceDto) {
         BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
+
+        OwnershipUtils.checkSalonOwnership(beautySalon, userRepository);
 
         Optional<BeautyService> beautyService = beautyServiceRepository.getBeautyServiceByIdAndBeautySalon(serviceId, beautySalon);
         if (beautyService.isPresent()) {

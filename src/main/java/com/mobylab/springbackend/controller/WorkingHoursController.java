@@ -4,6 +4,7 @@ import com.mobylab.springbackend.service.WorkingHoursService;
 import com.mobylab.springbackend.service.dto.workinghours.CreateWorkingHoursDto;
 import com.mobylab.springbackend.service.dto.workinghours.WorkingHoursDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,12 +32,14 @@ public class WorkingHoursController implements SecuredRestController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OWNER')")
     public ResponseEntity<WorkingHoursDto> addEmployeeWorkingHours(@PathVariable UUID employeeId, @RequestBody CreateWorkingHoursDto createWorkingHoursDto) {
         WorkingHoursDto createdWorkingHours = workingHoursService.addEmployeeWorkingHours(employeeId, createWorkingHoursDto);
         return ResponseEntity.status(201).body(createdWorkingHours);
     }
 
     @PutMapping("/{workingHoursId}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OWNER')")
     public ResponseEntity<WorkingHoursDto> updateEmployeeWorkingHours(@PathVariable UUID employeeId,
                                                                   @PathVariable UUID workingHoursId,
                                                                   @RequestBody CreateWorkingHoursDto createWorkingHoursDto) {
@@ -45,6 +48,7 @@ public class WorkingHoursController implements SecuredRestController {
     }
 
     @DeleteMapping("/{workingHoursId}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OWNER')")
     public ResponseEntity<String> deleteEmployeeWorkingHours(@PathVariable UUID employeeId, @PathVariable UUID workingHoursId) {
         workingHoursService.deleteEmployeeWorkingHours(employeeId, workingHoursId);
         return ResponseEntity.noContent().build();

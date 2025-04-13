@@ -2,12 +2,17 @@ package com.mobylab.springbackend.service;
 
 import com.mobylab.springbackend.entity.BeautySalon;
 import com.mobylab.springbackend.entity.Category;
+import com.mobylab.springbackend.entity.User;
 import com.mobylab.springbackend.exception.ResourceNotFoundException;
 import com.mobylab.springbackend.repository.BeautySalonRepository;
 import com.mobylab.springbackend.repository.CategoryRepository;
+import com.mobylab.springbackend.repository.UserRepository;
 import com.mobylab.springbackend.service.dto.beautysalon.BeautySalonDto;
 import com.mobylab.springbackend.service.dto.beautysalon.CreateBeautySalonDto;
+import com.mobylab.springbackend.util.OwnershipUtils;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,11 +25,14 @@ import java.util.stream.Collectors;
 public class BeautySalonService {
     private final BeautySalonRepository beautySalonRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     public BeautySalonService(BeautySalonRepository beautySalonRepository,
-                              CategoryRepository categoryRepository) {
+                              CategoryRepository categoryRepository,
+                              UserRepository userRepository) {
         this.beautySalonRepository = beautySalonRepository;
         this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
     }
 
     public List<BeautySalonDto> getBeautySalons() {
@@ -59,6 +67,12 @@ public class BeautySalonService {
     }
 
     public BeautySalonDto addBeautySalon(CreateBeautySalonDto beautySalonDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        User owner = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
         Category category = categoryRepository.findById(beautySalonDto.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
@@ -70,6 +84,7 @@ public class BeautySalonService {
         beautySalon.setPhone(beautySalonDto.getPhone());
         beautySalon.setNumEmployees(beautySalonDto.getNumEmployees());
         beautySalon.setCategory(category);
+        beautySalon.setOwner(owner);
 
         beautySalonRepository.save(beautySalon);
 
@@ -87,15 +102,19 @@ public class BeautySalonService {
         BeautySalon beautySalon = beautySalonRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Beauty salon not found"));
 
+        OwnershipUtils.checkSalonOwnership(beautySalon, userRepository);
+
         beautySalonRepository.delete(beautySalon);
     }
 
     public BeautySalonDto updateBeautySalon(UUID id, CreateBeautySalonDto beautySalonDto) {
-        Category category = categoryRepository.findById(beautySalonDto.getCategoryId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
-
         BeautySalon beautySalon = beautySalonRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Beauty salon not found"));
+
+        OwnershipUtils.checkSalonOwnership(beautySalon, userRepository);
+
+        Category category = categoryRepository.findById(beautySalonDto.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         beautySalon.setName(beautySalonDto.getName());
         beautySalon.setCity(beautySalonDto.getCity());

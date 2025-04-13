@@ -6,6 +6,7 @@ import com.mobylab.springbackend.service.dto.review.CreateReviewDto;
 import com.mobylab.springbackend.service.dto.review.ReviewDto;
 import com.mobylab.springbackend.service.dto.review.UpdateReviewDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,12 +28,14 @@ public class ReviewController implements SecuredRestController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<ReviewDto> addReview(@PathVariable UUID salonId, @RequestBody CreateReviewDto createReviewDto) {
         ReviewDto createdReview = reviewService.addReview(salonId, createReviewDto);
         return ResponseEntity.status(201).body(createdReview);
     }
 
     @PutMapping("/{reviewId}")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<ReviewDto> updateReview(@PathVariable UUID salonId,
                                                @PathVariable UUID reviewId,
                                                @RequestBody UpdateReviewDto updateReviewDto) {
@@ -41,6 +44,7 @@ public class ReviewController implements SecuredRestController {
     }
 
     @DeleteMapping("/{reviewId}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     public ResponseEntity<String> deleteReview(@PathVariable UUID salonId,
                                                @PathVariable UUID reviewId) {
         reviewService.deleteReview(salonId, reviewId);

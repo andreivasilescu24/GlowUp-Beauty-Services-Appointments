@@ -7,6 +7,7 @@ import com.mobylab.springbackend.service.dto.appointment.CreateAppointmentDto;
 import com.mobylab.springbackend.service.dto.appointment.UpdateAppointmentDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,8 @@ public class AppointmentController implements SecuredRestController {
         this.appointmentService = appointmentService;
     }
 
-
     @GetMapping("/me")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<List<AppointmentDto>> getMyAppointments() {
         List<AppointmentDto> appointments = appointmentService.getMyAppointments();
         return ResponseEntity.status(200).body(appointments);
