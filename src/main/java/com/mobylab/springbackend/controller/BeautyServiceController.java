@@ -3,6 +3,7 @@ package com.mobylab.springbackend.controller;
 import com.mobylab.springbackend.entity.BeautyService;
 import com.mobylab.springbackend.service.BeautyServiceManagementService;
 import com.mobylab.springbackend.service.dto.beautyservice.BeautyServiceDto;
+import com.mobylab.springbackend.service.dto.beautyservice.CreateBeautyServiceDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +32,8 @@ public class BeautyServiceController implements SecuredRestController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<BeautyService> addBeautyService(@PathVariable UUID salonId, @RequestBody BeautyServiceDto beautyServiceDto) {
-        BeautyService createdBeautyService = beautyServiceManagementService.addBeautyService(salonId, beautyServiceDto);
+    public ResponseEntity<BeautyServiceDto> addBeautyService(@PathVariable UUID salonId, @RequestBody CreateBeautyServiceDto createBeautyServiceDto) {
+        BeautyServiceDto createdBeautyService = beautyServiceManagementService.addBeautyService(salonId, createBeautyServiceDto);
         return ResponseEntity.status(201).body(createdBeautyService);
     }
 
@@ -43,8 +44,8 @@ public class BeautyServiceController implements SecuredRestController {
     }
 
     @PutMapping("/update/{serviceId}")
-    public ResponseEntity<BeautyService> updateBeautyService(@PathVariable UUID salonId, @PathVariable UUID serviceId, @RequestBody BeautyServiceDto beautyServiceDto) {
-        BeautyService updatedBeautyService = beautyServiceManagementService.updateBeautyService(salonId, serviceId,  beautyServiceDto);
+    public ResponseEntity<BeautyServiceDto> updateBeautyService(@PathVariable UUID salonId, @PathVariable UUID serviceId, @RequestBody CreateBeautyServiceDto createBeautyServiceDto) {
+        BeautyServiceDto updatedBeautyService = beautyServiceManagementService.updateBeautyService(salonId, serviceId,  createBeautyServiceDto);
         return ResponseEntity.status(200).body(updatedBeautyService);
     }
 }

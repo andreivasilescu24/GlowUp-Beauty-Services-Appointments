@@ -30,7 +30,7 @@ public class WorkingHoursService {
     }
 
     private void checkHoursValability(LocalTime startTime, LocalTime endTime) {
-        if (startTime.isBefore(endTime)) {
+        if (startTime.isAfter(endTime)) {
             throw new BadRequestException("Start time must be before end time");
         }
     }

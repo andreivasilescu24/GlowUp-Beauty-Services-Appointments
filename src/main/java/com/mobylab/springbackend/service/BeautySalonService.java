@@ -58,7 +58,7 @@ public class BeautySalonService {
         }
     }
 
-    public BeautySalon addBeautySalon(CreateBeautySalonDto beautySalonDto) {
+    public BeautySalonDto addBeautySalon(CreateBeautySalonDto beautySalonDto) {
         Category category = categoryRepository.findById(beautySalonDto.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
@@ -71,7 +71,16 @@ public class BeautySalonService {
         beautySalon.setNumEmployees(beautySalonDto.getNumEmployees());
         beautySalon.setCategory(category);
 
-        return beautySalonRepository.save(beautySalon);
+        beautySalonRepository.save(beautySalon);
+
+        return new BeautySalonDto()
+                .setId(beautySalon.getId())
+                .setName(beautySalon.getName())
+                .setCity(beautySalon.getCity())
+                .setAddress(beautySalon.getAddress())
+                .setEmail(beautySalon.getEmail())
+                .setPhone(beautySalon.getPhone())
+                .setNumEmployees(beautySalon.getNumEmployees());
     }
 
     public void deleteBeautySalon(UUID id) {
@@ -81,7 +90,7 @@ public class BeautySalonService {
         beautySalonRepository.delete(beautySalon);
     }
 
-    public BeautySalon updateBeautySalon(UUID id, CreateBeautySalonDto beautySalonDto) {
+    public BeautySalonDto updateBeautySalon(UUID id, CreateBeautySalonDto beautySalonDto) {
         Category category = categoryRepository.findById(beautySalonDto.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
@@ -96,6 +105,15 @@ public class BeautySalonService {
         beautySalon.setNumEmployees(beautySalonDto.getNumEmployees());
         beautySalon.setCategory(category);
 
-        return beautySalonRepository.save(beautySalon);
+        beautySalonRepository.save(beautySalon);
+
+        return new BeautySalonDto()
+                .setId(beautySalon.getId())
+                .setName(beautySalon.getName())
+                .setCity(beautySalon.getCity())
+                .setAddress(beautySalon.getAddress())
+                .setEmail(beautySalon.getEmail())
+                .setPhone(beautySalon.getPhone())
+                .setNumEmployees(beautySalon.getNumEmployees());
     }
 }

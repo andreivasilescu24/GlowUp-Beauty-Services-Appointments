@@ -35,8 +35,8 @@ public class BeautySalonController implements SecuredRestController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<BeautySalon> addBeautySalon(@RequestBody CreateBeautySalonDto beautySalonDto) {
-        BeautySalon beautySalon = beautySalonService.addBeautySalon(beautySalonDto);
+    public ResponseEntity<BeautySalonDto> addBeautySalon(@RequestBody CreateBeautySalonDto beautySalonDto) {
+        BeautySalonDto beautySalon = beautySalonService.addBeautySalon(beautySalonDto);
         return ResponseEntity.status(201).body(beautySalon);
     }
 
@@ -49,8 +49,8 @@ public class BeautySalonController implements SecuredRestController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<BeautySalon> updateBeautySalon(@PathVariable UUID id, @RequestBody CreateBeautySalonDto beautySalonDto) {
-        BeautySalon beautySalon = beautySalonService.updateBeautySalon(id, beautySalonDto);
+    public ResponseEntity<BeautySalonDto> updateBeautySalon(@PathVariable UUID id, @RequestBody CreateBeautySalonDto beautySalonDto) {
+        BeautySalonDto beautySalon = beautySalonService.updateBeautySalon(id, beautySalonDto);
         return ResponseEntity.status(200).body(beautySalon);
     }
 }

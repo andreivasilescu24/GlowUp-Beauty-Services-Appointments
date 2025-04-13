@@ -3,6 +3,7 @@ package com.mobylab.springbackend.controller;
 import com.mobylab.springbackend.entity.Employee;
 import com.mobylab.springbackend.entity.EmployeeAvailableService;
 import com.mobylab.springbackend.service.EmployeeService;
+import com.mobylab.springbackend.service.dto.employee.CreateEmployeeDto;
 import com.mobylab.springbackend.service.dto.employeeservices.CreateEmployeeAvailableServiceDto;
 import com.mobylab.springbackend.service.dto.employee.EmployeeDto;
 import com.mobylab.springbackend.service.dto.employeeservices.EmployeeAvailableServiceDto;
@@ -34,8 +35,8 @@ public class EmployeesController implements SecuredRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Employee> addEmployee(@PathVariable UUID salon_id, @RequestBody EmployeeDto employeeDto) {
-        Employee createdEmployee = employeeService.addSalonEmployee(salon_id, employeeDto);
+    public ResponseEntity<EmployeeDto> addEmployee(@PathVariable UUID salon_id, @RequestBody CreateEmployeeDto createEmployeeDto) {
+        EmployeeDto createdEmployee = employeeService.addSalonEmployee(salon_id, createEmployeeDto);
         return ResponseEntity.status(201).body(createdEmployee);
     }
 
@@ -46,21 +47,21 @@ public class EmployeesController implements SecuredRestController {
     }
 
     @PutMapping("/{employee_id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable UUID salon_id,
+    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable UUID salon_id,
                                                    @PathVariable UUID employee_id,
-                                                   @RequestBody EmployeeDto employeeDto) {
-        Employee updatedEmployee = employeeService.updateSalonEmployee(salon_id, employee_id, employeeDto);
+                                                   @RequestBody CreateEmployeeDto createEmployeeDto) {
+        EmployeeDto updatedEmployee = employeeService.updateSalonEmployee(salon_id, employee_id, createEmployeeDto);
         return ResponseEntity.status(200).body(updatedEmployee);
     }
 
     // EMPLOYEE SERVICES
 
     @PostMapping("/{employee_id}/services/{service_id}")
-    public ResponseEntity<EmployeeAvailableService> getEmployeeServices(@PathVariable UUID salon_id,
+    public ResponseEntity<EmployeeAvailableServiceDto> getEmployeeServices(@PathVariable UUID salon_id,
                                                                         @PathVariable UUID employee_id,
                                                                         @PathVariable UUID service_id,
                                                                         @RequestBody CreateEmployeeAvailableServiceDto createEmployeeAvailableServiceDto) {
-        EmployeeAvailableService employeeAvailableService = this.employeeService.addServiceToEmployee(salon_id, employee_id, service_id, createEmployeeAvailableServiceDto);
+        EmployeeAvailableServiceDto employeeAvailableService = this.employeeService.addServiceToEmployee(salon_id, employee_id, service_id, createEmployeeAvailableServiceDto);
         return ResponseEntity.status(201).body(employeeAvailableService);
     }
 
@@ -80,11 +81,11 @@ public class EmployeesController implements SecuredRestController {
     }
 
     @PutMapping("/{employee_id}/services/{service_id}")
-    public ResponseEntity<EmployeeAvailableService> updateEmployeeService(@PathVariable UUID salon_id,
+    public ResponseEntity<EmployeeAvailableServiceDto> updateEmployeeService(@PathVariable UUID salon_id,
                                                                           @PathVariable UUID employee_id,
                                                                           @PathVariable UUID service_id,
                                                                           @RequestBody CreateEmployeeAvailableServiceDto createEmployeeAvailableServiceDto) {
-        EmployeeAvailableService updatedEmployeeAvailableService = this.employeeService.updateEmployeeService(salon_id, employee_id, service_id, createEmployeeAvailableServiceDto);
+        EmployeeAvailableServiceDto updatedEmployeeAvailableService = this.employeeService.updateEmployeeService(salon_id, employee_id, service_id, createEmployeeAvailableServiceDto);
         return ResponseEntity.status(200).body(updatedEmployeeAvailableService);
     }
 }

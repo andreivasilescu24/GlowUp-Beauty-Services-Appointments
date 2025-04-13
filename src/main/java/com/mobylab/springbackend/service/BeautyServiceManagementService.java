@@ -6,6 +6,7 @@ import com.mobylab.springbackend.exception.ResourceNotFoundException;
 import com.mobylab.springbackend.repository.BeautySalonRepository;
 import com.mobylab.springbackend.repository.BeautyServiceRepository;
 import com.mobylab.springbackend.service.dto.beautyservice.BeautyServiceDto;
+import com.mobylab.springbackend.service.dto.beautyservice.CreateBeautyServiceDto;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -55,15 +56,20 @@ public class BeautyServiceManagementService {
         ).orElseThrow(() -> new ResourceNotFoundException("Beauty service not found"));
     }
 
-    public BeautyService addBeautyService(UUID salonId, BeautyServiceDto beautyServiceDto) {
+    public BeautyServiceDto addBeautyService(UUID salonId, CreateBeautyServiceDto createBeautyServiceDto) {
         BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
 
         BeautyService beautyService = new BeautyService();
-        beautyService.setName(beautyServiceDto.getName());
-        beautyService.setDescription(beautyServiceDto.getDescription());
+        beautyService.setName(createBeautyServiceDto.getName());
+        beautyService.setDescription(createBeautyServiceDto.getDescription());
         beautyService.setBeautySalon(beautySalon);
 
-        return beautyServiceRepository.save(beautyService);
+        beautyServiceRepository.save(beautyService);
+
+        return new BeautyServiceDto()
+                .setId(beautyService.getId())
+                .setName(beautyService.getName())
+                .setDescription(beautyService.getDescription());
     }
 
     public void deleteBeautyService(UUID salonId, UUID serviceId) {
@@ -78,16 +84,21 @@ public class BeautyServiceManagementService {
         }
     }
 
-    public BeautyService updateBeautyService(UUID salonId, UUID serviceId, BeautyServiceDto beautyServiceDto) {
+    public BeautyServiceDto updateBeautyService(UUID salonId, UUID serviceId, CreateBeautyServiceDto createBeautyServiceDto) {
         BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
 
         Optional<BeautyService> beautyService = beautyServiceRepository.getBeautyServiceByIdAndBeautySalon(serviceId, beautySalon);
         if (beautyService.isPresent()) {
             BeautyService serviceToUpdate = beautyService.get();
-            serviceToUpdate.setName(beautyServiceDto.getName());
-            serviceToUpdate.setDescription(beautyServiceDto.getDescription());
+            serviceToUpdate.setName(createBeautyServiceDto.getName());
+            serviceToUpdate.setDescription(createBeautyServiceDto.getDescription());
 
-            return beautyServiceRepository.save(serviceToUpdate);
+            beautyServiceRepository.save(serviceToUpdate);
+
+            return new BeautyServiceDto()
+                    .setId(serviceId)
+                    .setName(serviceToUpdate.getName())
+                    .setDescription(serviceToUpdate.getDescription());
         } else {
             throw new ResourceNotFoundException("Beauty service not found");
         }

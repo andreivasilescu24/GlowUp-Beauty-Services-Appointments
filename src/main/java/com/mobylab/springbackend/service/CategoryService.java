@@ -30,10 +30,14 @@ public class CategoryService {
     }
 
 
-    public Category addCategory(CreateCategoryDto categoryDto) {
+    public CategoryDto addCategory(CreateCategoryDto categoryDto) {
         Category category = new Category();
         category.setName(categoryDto.getName());
-        return this.categoryRepository.save(category);
+        categoryRepository.save(category);
+
+        return new CategoryDto()
+                .setId(category.getId())
+                .setName(category.getName());
     }
 
     public void deleteCategory(UUID categoryId) {
@@ -45,12 +49,16 @@ public class CategoryService {
         }
     }
 
-    public Category updateCategory(UUID categoryId, CreateCategoryDto categoryDto) {
+    public CategoryDto updateCategory(UUID categoryId, CreateCategoryDto categoryDto) {
         Optional<Category> category = this.categoryRepository.findById(categoryId);
         if (category.isPresent()) {
             Category existingCategory = category.get();
             existingCategory.setName(categoryDto.getName());
-            return this.categoryRepository.save(existingCategory);
+            categoryRepository.save(existingCategory);
+
+            return new CategoryDto()
+                    .setId(existingCategory.getId())
+                    .setName(existingCategory.getName());
         } else {
             throw new ResourceNotFoundException("Category not found");
         }

@@ -27,16 +27,16 @@ public class ReviewController implements SecuredRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Review> addReview(@PathVariable UUID salonId, @RequestBody CreateReviewDto createReviewDto) {
-        Review createdReview = reviewService.addReview(salonId, createReviewDto);
+    public ResponseEntity<ReviewDto> addReview(@PathVariable UUID salonId, @RequestBody CreateReviewDto createReviewDto) {
+        ReviewDto createdReview = reviewService.addReview(salonId, createReviewDto);
         return ResponseEntity.status(201).body(createdReview);
     }
 
     @PutMapping("/{reviewId}")
-    public ResponseEntity<Review> updateReview(@PathVariable UUID salonId,
+    public ResponseEntity<ReviewDto> updateReview(@PathVariable UUID salonId,
                                                @PathVariable UUID reviewId,
                                                @RequestBody UpdateReviewDto updateReviewDto) {
-        Review updatedReview = reviewService.updateReview(salonId, reviewId, updateReviewDto);
+        ReviewDto updatedReview = reviewService.updateReview(salonId, reviewId, updateReviewDto);
         return ResponseEntity.status(200).body(updatedReview);
     }
 

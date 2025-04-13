@@ -2,25 +2,15 @@ package com.mobylab.springbackend.service.dto.beautyservice;
 
 import java.util.UUID;
 
-public class BeautyServiceDto {
-    private UUID id;
+public class CreateBeautyServiceDto {
     private String name;
     private String description;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public BeautyServiceDto setId(UUID id) {
-        this.id = id;
-        return this;
-    }
 
     public String getName() {
         return name;
     }
 
-    public BeautyServiceDto setName(String name) {
+    public CreateBeautyServiceDto setName(String name) {
         this.name = name;
         return this;
     }
@@ -29,7 +19,7 @@ public class BeautyServiceDto {
         return description;
     }
 
-    public BeautyServiceDto setDescription(String description) {
+    public CreateBeautyServiceDto setDescription(String description) {
         this.description = description;
         return this;
     }

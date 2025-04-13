@@ -26,8 +26,8 @@ public class CategoryController implements SecuredRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Category> addCategory(CreateCategoryDto categoryDto) {
-        Category createdCategory = this.categoryService.addCategory(categoryDto);
+    public ResponseEntity<CategoryDto> addCategory(CreateCategoryDto categoryDto) {
+        CategoryDto createdCategory = this.categoryService.addCategory(categoryDto);
         return ResponseEntity.status(201).body(createdCategory);
     }
 
@@ -38,8 +38,8 @@ public class CategoryController implements SecuredRestController {
     }
 
     @PutMapping("/{categoryId}")
-    public ResponseEntity<Category> updateCategory(@PathVariable UUID categoryId, @RequestBody CreateCategoryDto categoryDto) {
-        Category updatedCategory = this.categoryService.updateCategory(categoryId, categoryDto);
+    public ResponseEntity<CategoryDto> updateCategory(@PathVariable UUID categoryId, @RequestBody CreateCategoryDto categoryDto) {
+        CategoryDto updatedCategory = this.categoryService.updateCategory(categoryId, categoryDto);
         return ResponseEntity.status(200).body(updatedCategory);
     }
 }

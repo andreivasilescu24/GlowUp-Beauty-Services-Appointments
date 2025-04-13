@@ -10,6 +10,7 @@ import com.mobylab.springbackend.repository.BeautySalonRepository;
 import com.mobylab.springbackend.repository.BeautyServiceRepository;
 import com.mobylab.springbackend.repository.EmployeeAvailableServiceRepository;
 import com.mobylab.springbackend.repository.EmployeesRepository;
+import com.mobylab.springbackend.service.dto.employee.CreateEmployeeDto;
 import com.mobylab.springbackend.service.dto.employeeservices.CreateEmployeeAvailableServiceDto;
 import com.mobylab.springbackend.service.dto.employeeservices.EmployeeAvailableServiceDto;
 import com.mobylab.springbackend.service.dto.employee.EmployeeDto;
@@ -71,6 +72,8 @@ public class EmployeeService {
         return employeesBySalon.map(employees ->
                         employees.stream()
                                 .map(employee -> new EmployeeDto()
+                                        .setId(employee.getId())
+                                        .setSalonId(employee.getBeautySalon().getId())
                                         .setName(employee.getName())
                                         .setExperience(employee.getExperience())
                                         .setPhone(employee.getPhone()))
@@ -83,6 +86,8 @@ public class EmployeeService {
         Optional<Employee> employee = employeesRepository.getEmployeeByBeautySalonAndId(beautySalon, employeeId);
         if (employee.isPresent()) {
             return new EmployeeDto()
+                    .setId(employee.get().getId())
+                    .setSalonId(employee.get().getBeautySalon().getId())
                     .setName(employee.get().getName())
                     .setExperience(employee.get().getExperience())
                     .setPhone(employee.get().getPhone());
@@ -91,15 +96,22 @@ public class EmployeeService {
         }
     }
 
-    public Employee addSalonEmployee(UUID salonId, EmployeeDto employeeDto) {
+    public EmployeeDto addSalonEmployee(UUID salonId, CreateEmployeeDto createEmployeeDto) {
         BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
         Employee employee = new Employee();
-        employee.setExperience(employeeDto.getExperience());
+        employee.setExperience(createEmployeeDto.getExperience());
         employee.setBeautySalon(beautySalon);
-        employee.setName(employeeDto.getName());
-        employee.setPhone(employeeDto.getPhone());
+        employee.setName(createEmployeeDto.getName());
+        employee.setPhone(createEmployeeDto.getPhone());
 
-        return employeesRepository.save(employee);
+        employeesRepository.save(employee);
+
+        return new EmployeeDto()
+                .setId(employee.getId())
+                .setSalonId(employee.getBeautySalon().getId())
+                .setName(employee.getName())
+                .setExperience(employee.getExperience())
+                .setPhone(employee.getPhone());
     }
 
     public void deleteSalonEmployee(UUID salonId, UUID employeeId) {
@@ -112,22 +124,29 @@ public class EmployeeService {
         }
     }
 
-    public Employee updateSalonEmployee(UUID salonId, UUID employeeId, EmployeeDto employeeDto) {
+    public EmployeeDto updateSalonEmployee(UUID salonId, UUID employeeId, CreateEmployeeDto createEmployeeDto) {
         BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
 
         Optional<Employee> employee = employeesRepository.getEmployeeByBeautySalonAndId(beautySalon, employeeId);
         if (employee.isPresent()) {
             Employee existingEmployee = employee.get();
-            existingEmployee.setExperience(employeeDto.getExperience());
-            existingEmployee.setName(employeeDto.getName());
-            existingEmployee.setPhone(employeeDto.getPhone());
-            return employeesRepository.save(existingEmployee);
+            existingEmployee.setExperience(createEmployeeDto.getExperience());
+            existingEmployee.setName(createEmployeeDto.getName());
+            existingEmployee.setPhone(createEmployeeDto.getPhone());
+            employeesRepository.save(existingEmployee);
+
+            return new EmployeeDto()
+                    .setId(existingEmployee.getId())
+                    .setSalonId(existingEmployee.getBeautySalon().getId())
+                    .setName(existingEmployee.getName())
+                    .setExperience(existingEmployee.getExperience())
+                    .setPhone(existingEmployee.getPhone());
         } else {
             throw new ResourceNotFoundException("Employee not found");
         }
     }
 
-    public EmployeeAvailableService addServiceToEmployee(UUID salonId, UUID employeeId, UUID serviceId,
+    public EmployeeAvailableServiceDto addServiceToEmployee(UUID salonId, UUID employeeId, UUID serviceId,
                                                          CreateEmployeeAvailableServiceDto createEmployeeAvailableServiceDto) {
         BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
         BeautyService beautyService = getBeautyServiceById(serviceId);
@@ -148,7 +167,15 @@ public class EmployeeService {
                             beautyService,
                             servicePrice,
                             serviceDuration);
-            return employeeAvailableServiceRepository.save(employeeAvailableService);
+            employeeAvailableServiceRepository.save(employeeAvailableService);
+
+            return new EmployeeAvailableServiceDto()
+                    .setServiceId(employeeAvailableService.getId().getServiceId())
+                    .setEmployeeId(employeeAvailableService.getId().getEmployeeId())
+                    .setDuration(employeeAvailableService.getDuration())
+                    .setPrice(employeeAvailableService.getPrice())
+                    .setServiceName(beautyService.getName())
+                    .setDescription(beautyService.getDescription());
         } else {
             throw new ResourceNotFoundException("Employee not found or doesn't work at the selected salon");
         }
@@ -163,6 +190,8 @@ public class EmployeeService {
 
             return employeeAvailableServices.map(employeeAvailableServices1 ->
                             employeeAvailableServices1.stream().map(employeeService -> new EmployeeAvailableServiceDto()
+                                    .setServiceId(employeeService.getId().getServiceId())
+                                    .setEmployeeId(employeeService.getId().getEmployeeId())
                                     .setDuration(employeeService.getDuration())
                                     .setPrice(employeeService.getPrice())
                                     .setServiceName(employeeService.getService().getName())
@@ -195,7 +224,7 @@ public class EmployeeService {
         }
     }
 
-    public EmployeeAvailableService updateEmployeeService(UUID salonId, UUID employeeId, UUID serviceId, CreateEmployeeAvailableServiceDto createEmployeeAvailableServiceDto) {
+    public EmployeeAvailableServiceDto updateEmployeeService(UUID salonId, UUID employeeId, UUID serviceId, CreateEmployeeAvailableServiceDto createEmployeeAvailableServiceDto) {
         BeautySalon beautySalon = getCorrespondingBeautySalon(salonId);
         Optional<Employee> employee = employeesRepository.getEmployeeByBeautySalonAndId(beautySalon, employeeId);
         if (employee.isPresent()) {
@@ -213,7 +242,15 @@ public class EmployeeService {
                     EmployeeAvailableService existingEmployeeAvailableService = employeeAvailableService.get();
                     existingEmployeeAvailableService.setPrice(servicePrice);
                     existingEmployeeAvailableService.setDuration(serviceDuration);
-                    return employeeAvailableServiceRepository.save(existingEmployeeAvailableService);
+                    employeeAvailableServiceRepository.save(existingEmployeeAvailableService);
+
+                    return new EmployeeAvailableServiceDto()
+                            .setServiceId(existingEmployeeAvailableService.getId().getServiceId())
+                            .setEmployeeId(existingEmployeeAvailableService.getId().getEmployeeId())
+                            .setDuration(existingEmployeeAvailableService.getDuration())
+                            .setPrice(existingEmployeeAvailableService.getPrice())
+                            .setServiceName(beautyService.get().getName())
+                            .setDescription(beautyService.get().getDescription());
                 } else {
                     throw new ResourceNotFoundException("Service was not found for this employee");
                 }

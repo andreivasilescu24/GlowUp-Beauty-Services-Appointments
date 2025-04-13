@@ -51,7 +51,7 @@ public class ReviewService {
                 .orElse(Collections.emptyList());
     }
 
-    public Review addReview(UUID salonId, CreateReviewDto createReviewDto) {
+    public ReviewDto addReview(UUID salonId, CreateReviewDto createReviewDto) {
         User client = userRepository.findById(createReviewDto.getClientId())
                 .orElseThrow(() -> new ResourceNotFoundException("Client not found"));
 
@@ -65,10 +65,17 @@ public class ReviewService {
         review.setComment(createReviewDto.getComment());
         review.setCreatedAt(LocalDateTime.now(Clock.systemDefaultZone()));
 
-        return reviewRepository.save(review);
+        reviewRepository.save(review);
+
+        return new ReviewDto()
+                .setId(review.getId())
+                .setComment(review.getComment())
+                .setRating(review.getRating())
+                .setCreatedAt(review.getCreatedAt())
+                .setClientId(client.getName());
     }
 
-    public Review updateReview(UUID salonId, UUID reviewId, UpdateReviewDto updateReviewDto) {
+    public ReviewDto updateReview(UUID salonId, UUID reviewId, UpdateReviewDto updateReviewDto) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
 
@@ -79,7 +86,14 @@ public class ReviewService {
         review.setRating(updateReviewDto.getRating());
         review.setComment(updateReviewDto.getComment());
 
-        return reviewRepository.save(review);
+        reviewRepository.save(review);
+
+        return new ReviewDto()
+                .setId(review.getId())
+                .setComment(review.getComment())
+                .setRating(review.getRating())
+                .setCreatedAt(review.getCreatedAt())
+                .setClientId(review.getClient().getName());
     }
 
     public void deleteReview(UUID salonId, UUID reviewId) {

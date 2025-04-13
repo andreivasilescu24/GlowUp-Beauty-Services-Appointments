@@ -13,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -31,6 +30,8 @@ public class AppointmentService {
     private final WorkingHoursRepository workingHoursRepository;
     private final EmployeeAvailableServiceRepository employeeAvailableServiceRepository;
 
+    private final EmailService emailService;
+
     public AppointmentService(AppointmentRepository appointmentRepository,
                               BeautySalonRepository beautySalonRepository,
                               EmployeesRepository employeesRepository,
@@ -38,7 +39,8 @@ public class AppointmentService {
                               AppointmentStatusRepository appointmentStatusRepository,
                               UserRepository userRepository,
                               WorkingHoursRepository workingHoursRepository,
-                              EmployeeAvailableServiceRepository employeeAvailableServiceRepository) {
+                              EmployeeAvailableServiceRepository employeeAvailableServiceRepository,
+                              EmailService emailService) {
         this.appointmentRepository = appointmentRepository;
         this.beautySalonRepository = beautySalonRepository;
         this.employeesRepository = employeesRepository;
@@ -47,6 +49,7 @@ public class AppointmentService {
         this.userRepository = userRepository;
         this.workingHoursRepository = workingHoursRepository;
         this.employeeAvailableServiceRepository = employeeAvailableServiceRepository;
+        this.emailService = emailService;
     }
 
     private void checkAppointmentAvailability(LocalDateTime appointmentDateAndTime, Employee employee, int serviceDuration) {
@@ -101,10 +104,10 @@ public class AppointmentService {
 
     public AppointmentDto createAppointment(CreateAppointmentDto createAppointmentDto) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
+        String userEmail = auth.getName();
 
-        User authUser = userRepository.findUserByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        BeautySalon beautySalon = beautySalonRepository.findById(createAppointmentDto.getBeautySalonId())
+        User authUser = userRepository.findUserByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        BeautySalon beautySalon = beautySalonRepository.getBeautySalonById(createAppointmentDto.getBeautySalonId())
                 .orElseThrow(() -> new ResourceNotFoundException("Beauty salon not found"));
         BeautyService beautyService = beautyServiceRepository.findById(createAppointmentDto.getBeautyServiceId())
                 .orElseThrow(() -> new ResourceNotFoundException("Beauty service not found"));
@@ -120,16 +123,34 @@ public class AppointmentService {
             throw new ResourceNotFoundException("Employee does not provide this service");
         }
 
+        LocalDateTime appointmentDateAndTime = createAppointmentDto.getAppointmentDateAndTime();
+
         Appointment appointment = new Appointment()
                 .setClient(authUser)
                 .setBeautySalon(beautySalon)
                 .setBeautyService(beautyService)
                 .setEmployee(employee)
-                .setAppointmentDateAndTime(createAppointmentDto.getAppointmentDateAndTime());
+                .setAppointmentDateAndTime(appointmentDateAndTime);
 
-        checkAppointmentAvailability(createAppointmentDto.getAppointmentDateAndTime(), employee, employeeService.get().getDuration());
+
+        checkAppointmentAvailability(appointmentDateAndTime, employee, employeeService.get().getDuration());
 
         appointmentRepository.save(appointment);
+
+        String timeFormatted = String.format("%02d:%02d",
+                appointmentDateAndTime.getHour(),
+                appointmentDateAndTime.getMinute());
+
+        String subject = "Appointment Confirmation";
+        String text = "Hi " + authUser.getName() + ",\n\n" +
+                "Your appointment at " + beautySalon.getName() + " is confirmed for " +
+                appointmentDateAndTime.getDayOfWeek().name().substring(0, 1).toUpperCase() +
+                appointmentDateAndTime.getDayOfWeek().name().substring(1).toLowerCase() +
+                ", " + appointmentDateAndTime.toLocalDate() +
+                " at " + timeFormatted + ".\n\n" +
+                "Thank you for choosing GlowUp!";
+
+        emailService.sendEmail(userEmail, subject, text);
 
         return new AppointmentDto()
                 .setId(appointment.getId())
@@ -199,5 +220,7 @@ public class AppointmentService {
     public AppointmentDto updateAppointmentDetails(UpdateAppointmentDto appointmentDto) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
+
+        throw new UnsupportedOperationException();
     }
 }

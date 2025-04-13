@@ -1,10 +1,32 @@
 package com.mobylab.springbackend.service.dto.employeeservices;
 
+import java.util.UUID;
+
 public class EmployeeAvailableServiceDto {
+    private UUID employeeId;
+    private UUID serviceId;
     private String serviceName;
     private String description;
     private double price;
     private int duration;
+
+    public UUID getEmployeeId() {
+        return employeeId;
+    }
+
+    public EmployeeAvailableServiceDto setEmployeeId(UUID employeeId) {
+        this.employeeId = employeeId;
+        return this;
+    }
+
+    public UUID getServiceId() {
+        return serviceId;
+    }
+
+    public EmployeeAvailableServiceDto setServiceId(UUID serviceId) {
+        this.serviceId = serviceId;
+        return this;
+    }
 
     public String getServiceName() {
         return serviceName;
