@@ -244,11 +244,20 @@ public class AppointmentService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
 
+        User authUser = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
         // Retrieve the appointment
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
 
-        OwnershipUtils.checkAppointmentBelongsToClient(appointment, userRepository);
+        if (appointment.getStatus().getId() == 2) {
+            throw new BadRequestException("Appointment is already canceled");
+        }
+
+        if (appointment.getBeautySalon().getOwner().getId().equals(authUser.getId())) {
+            OwnershipUtils.checkAppointmentBelongsToClient(appointment, userRepository);
+        }
 
         // Update the appointment status to "Canceled"
         AppointmentStatus canceledStatus = appointmentStatusRepository.findByName("CANCELED")
