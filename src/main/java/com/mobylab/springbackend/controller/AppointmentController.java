@@ -4,12 +4,9 @@ import com.mobylab.springbackend.service.AppointmentService;
 import com.mobylab.springbackend.service.dto.appointment.AppointmentDto;
 import com.mobylab.springbackend.service.dto.appointment.AvailableSlotDto;
 import com.mobylab.springbackend.service.dto.appointment.CreateAppointmentDto;
-import com.mobylab.springbackend.service.dto.appointment.UpdateAppointmentDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -49,9 +46,9 @@ public class AppointmentController implements SecuredRestController {
         return ResponseEntity.status(201).body(createdAppointment);
     }
 
-    @PutMapping
-    public ResponseEntity<AppointmentDto> updateAppointment(@RequestBody UpdateAppointmentDto appointmentDto) {
-        AppointmentDto updatedAppointment = appointmentService.updateAppointmentDetails(appointmentDto);
+    @PutMapping("/cancel/{appointmentId}")
+    public ResponseEntity<AppointmentDto> cancelAppointment(@PathVariable UUID appointmentId) {
+        AppointmentDto updatedAppointment = appointmentService.cancelAppointment(appointmentId);
         return ResponseEntity.status(200).body(updatedAppointment);
     }
 

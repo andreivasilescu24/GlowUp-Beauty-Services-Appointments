@@ -53,6 +53,18 @@ public class OwnershipUtils {
         if (!isAdmin() && !employee.getBeautySalon().getOwner().getId().equals(user.getId())) {
             throw new ResourceNotFoundException("You are not the owner of this beauty salon");
         }
+    }
 
+    public static void checkAppointmentBelongsToClient(Appointment appointment, UserRepository userRepository) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+
+        // Fetch the authenticated user
+        User authUser = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        if (!isAdmin() && !appointment.getClient().getId().equals(authUser.getId())) {
+            throw new ResourceNotFoundException("You are not the one who made this appointment");
+        }
     }
 }

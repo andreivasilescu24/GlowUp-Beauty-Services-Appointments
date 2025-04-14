@@ -7,7 +7,7 @@ import com.mobylab.springbackend.repository.*;
 import com.mobylab.springbackend.service.dto.appointment.AppointmentDto;
 import com.mobylab.springbackend.service.dto.appointment.AvailableSlotDto;
 import com.mobylab.springbackend.service.dto.appointment.CreateAppointmentDto;
-import com.mobylab.springbackend.service.dto.appointment.UpdateAppointmentDto;
+import com.mobylab.springbackend.util.OwnershipUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -240,10 +240,29 @@ public class AppointmentService {
         return availableSlots;
     }
 
-    public AppointmentDto updateAppointmentDetails(UpdateAppointmentDto appointmentDto) {
+    public AppointmentDto cancelAppointment(UUID appointmentId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
 
-        throw new UnsupportedOperationException();
+        // Retrieve the appointment
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
+
+        OwnershipUtils.checkAppointmentBelongsToClient(appointment, userRepository);
+
+        // Update the appointment status to "Canceled"
+        AppointmentStatus canceledStatus = appointmentStatusRepository.findByName("CANCELED")
+                .orElseThrow(() -> new ResourceNotFoundException("Canceled status not found"));
+
+        appointment.setStatus(canceledStatus);
+        appointmentRepository.save(appointment);
+
+        return new AppointmentDto()
+                .setId(appointment.getId())
+                .setAppointmentDateAndTime(appointment.getAppointmentDateAndTime())
+                .setBeautySalonName(appointment.getBeautySalon().getName())
+                .setEmployeeName(appointment.getEmployee().getName())
+                .setBeautyServiceName(appointment.getBeautyService().getName())
+                .setAppointmentStatus(appointment.getStatus().getName());
     }
 }
