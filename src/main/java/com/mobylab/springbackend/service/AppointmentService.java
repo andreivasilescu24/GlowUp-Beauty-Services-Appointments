@@ -144,8 +144,8 @@ public class AppointmentService {
             throw new BadRequestException("Appointment is outside the employee's working hours");
         }
 
-        AppointmentStatus scheduledStatus = new AppointmentStatus();
-        scheduledStatus.setId(1);
+        AppointmentStatus confirmedStatus = appointmentStatusRepository.findByName("CONFIRMED")
+                .orElseThrow(() -> new ResourceNotFoundException("Scheduled status not found"));
 
         Appointment appointment = new Appointment()
                 .setClient(authUser)
@@ -153,7 +153,7 @@ public class AppointmentService {
                 .setBeautyService(beautyService)
                 .setEmployee(employee)
                 .setAppointmentDateAndTime(appointmentDateAndTime)
-                .setStatus(scheduledStatus);
+                .setStatus(confirmedStatus);
 
 
         checkAppointmentAvailability(appointmentDateAndTime, employee, serviceDuration);
