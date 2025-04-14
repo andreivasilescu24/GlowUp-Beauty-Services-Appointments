@@ -35,11 +35,6 @@ public class Appointment {
     @JoinColumn(name = "status_id", nullable = false)
     private AppointmentStatus status;
 
-    public Appointment() {
-        this.status = new AppointmentStatus();
-        this.status.setId(1);
-    }
-
     public User getClient() {
         return client;
     }
