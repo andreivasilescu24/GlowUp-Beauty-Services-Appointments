@@ -125,15 +125,38 @@ public class AppointmentService {
 
         LocalDateTime appointmentDateAndTime = createAppointmentDto.getAppointmentDateAndTime();
 
+        if (appointmentDateAndTime.getMinute() % 10 != 0) {
+            throw new BadRequestException("Appointment time must be aligned to 10-minute intervals");
+        }
+
+        int serviceDuration = employeeService.get().getDuration();
+
+        WorkingHours workingHours = workingHoursRepository.findByEmployeeAndDay(employee, appointmentDateAndTime.getDayOfWeek().getValue())
+                .orElseThrow(() -> new ResourceNotFoundException("Working hours not found for the employee"));
+
+        LocalDateTime endTime = appointmentDateAndTime.plusMinutes(serviceDuration);
+        LocalDateTime workingStartTime = appointmentDateAndTime.toLocalDate()
+                .atTime(workingHours.getStartTime().getHour(), workingHours.getStartTime().getMinute());
+        LocalDateTime workingEndTime = appointmentDateAndTime.toLocalDate()
+                .atTime(workingHours.getEndTime().getHour(), workingHours.getEndTime().getMinute());
+
+        if (appointmentDateAndTime.isBefore(workingStartTime) || endTime.isAfter(workingEndTime)) {
+            throw new BadRequestException("Appointment is outside the employee's working hours");
+        }
+
+        AppointmentStatus scheduledStatus = new AppointmentStatus();
+        scheduledStatus.setId(1);
+
         Appointment appointment = new Appointment()
                 .setClient(authUser)
                 .setBeautySalon(beautySalon)
                 .setBeautyService(beautyService)
                 .setEmployee(employee)
-                .setAppointmentDateAndTime(appointmentDateAndTime);
+                .setAppointmentDateAndTime(appointmentDateAndTime)
+                .setStatus(scheduledStatus);
 
 
-        checkAppointmentAvailability(appointmentDateAndTime, employee, employeeService.get().getDuration());
+        checkAppointmentAvailability(appointmentDateAndTime, employee, serviceDuration);
 
         appointmentRepository.save(appointment);
 

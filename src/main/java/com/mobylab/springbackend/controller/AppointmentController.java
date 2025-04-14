@@ -43,6 +43,7 @@ public class AppointmentController implements SecuredRestController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<AppointmentDto> createAppointment(@RequestBody CreateAppointmentDto createAppointmentDto) {
         AppointmentDto createdAppointment = appointmentService.createAppointment(createAppointmentDto);
         return ResponseEntity.status(201).body(createdAppointment);

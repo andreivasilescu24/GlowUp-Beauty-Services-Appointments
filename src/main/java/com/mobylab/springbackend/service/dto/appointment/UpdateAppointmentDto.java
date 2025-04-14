@@ -1,11 +1,17 @@
 package com.mobylab.springbackend.service.dto.appointment;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class UpdateAppointmentDto {
     private UUID beautyServiceId;
     private UUID employeeId;
+    @Schema(description = "The date and time of the appointment in the format yyyy-MM-dd'T'HH:mm",
+            example = "2025-03-14T12:00")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime appointmentDateAndTime;
     private int statusId;
 
