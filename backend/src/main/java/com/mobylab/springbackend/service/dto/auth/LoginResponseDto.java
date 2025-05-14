@@ -14,6 +14,8 @@ public class LoginResponseDto {
     @JsonProperty("expires_in")
     @Value("${token.ttl}")
     private long expire;
+    @JsonProperty("role")
+    private String role;
 
     public String getToken() {
         return token;
@@ -25,6 +27,10 @@ public class LoginResponseDto {
 
     public long getExpire() {
         return expire;
+    }
+
+    public String getRole() {
+        return role;
     }
 
     public LoginResponseDto setToken(String token) {
@@ -39,6 +45,11 @@ public class LoginResponseDto {
 
     public LoginResponseDto setExpire(long expire) {
         this.expire = expire;
+        return this;
+    }
+
+    public LoginResponseDto setRole(String role) {
+        this.role = role;
         return this;
     }
 }
