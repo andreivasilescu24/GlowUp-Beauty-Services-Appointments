@@ -1,3 +1,6 @@
 /.idea
 */target
 */.env
+/frontend/glowup-frontend/node_modules
+/frontend/glowup-frontend/dist
+/frontend/glowup-frontend/build
