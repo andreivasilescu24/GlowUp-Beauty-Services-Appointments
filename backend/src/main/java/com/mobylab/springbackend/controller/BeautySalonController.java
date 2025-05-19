@@ -35,6 +35,13 @@ public class BeautySalonController implements SecuredRestController {
         return ResponseEntity.status(200).body(beautySalonDto);
     }
 
+    @GetMapping("/me")
+    @PreAuthorize("hasAuthority('OWNER')")
+    public ResponseEntity<List<BeautySalonDto>> getMyBeautySalons() {
+        List<BeautySalonDto> beautySalonDtoList = beautySalonService.getMyBeautySalons();
+        return ResponseEntity.status(200).body(beautySalonDtoList);
+    }
+
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OWNER')")
     public ResponseEntity<BeautySalonDto> addBeautySalon(@RequestBody CreateBeautySalonDto beautySalonDto) {

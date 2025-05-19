@@ -59,7 +59,6 @@ public class EmployeesController implements SecuredRestController {
     }
 
     // EMPLOYEE SERVICES
-
     @PostMapping("/{employee_id}/services/{service_id}")
     public ResponseEntity<EmployeeAvailableServiceDto> getEmployeeServices(@PathVariable UUID salon_id,
                                                                         @PathVariable UUID employee_id,

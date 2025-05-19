@@ -128,28 +128,34 @@
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    min-width: 120px;
 }
 
 .button-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     background: var(--primary-dark);
 }
 
 .button-secondary {
     background: transparent;
-    color: var(--primary);
-    border: 2px solid var(--primary);
+    color: var(--text-dark);
+    border: 2px solid var(--surface-light);
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 1rem;
     transition: all 0.3s ease;
+    min-width: 120px;
 }
 
 .button-secondary:hover {
-    background: var(--primary);
-    color: white;
+    background: var(--surface-light);
+    transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {
@@ -168,4 +174,772 @@
     .welcome-stats {
         grid-template-columns: 1fr;
     }
+}
+
+/* Home page specific styles */
+.home-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 300px);
+    text-align: center;
+    padding: 2rem;
+    margin-top: -100px;
+}
+
+.home-title {
+    font-size: 3.5rem;
+    color: white;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.home-description {
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 2.5rem;
+    max-width: 800px;
+    line-height: 1.6;
+}
+
+.explore-button {
+    background: white;
+    color: var(--primary);
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.explore-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background: var(--primary-light);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .home-title {
+        font-size: 2.5rem;
+    }
+
+    .home-description {
+        font-size: 1.2rem;
+    }
+
+    .explore-button {
+        font-size: 1rem;
+        padding: 0.8rem 1.6rem;
+    }
+}
+
+/* Page header styles */
+.page-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.page-header h1 {
+    color: var(--text-dark);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Modal styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--surface);
+    padding: 2rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+/* Form styles */
+.add-employee-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    color: var(--text-dark);
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.form-group input,
+.form-group select {
+    padding: 0.75rem;
+    border: 2px solid var(--surface-light);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--surface-light);
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(156, 39, 176, 0.1);
+    background: var(--surface-light);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.error-message {
+    color: var(--error);
+    padding: 1rem;
+    background: rgba(244, 67, 54, 0.1);
+    border-radius: 8px;
+    margin-top: 1rem;
+    text-align: center;
+    font-weight: 500;
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.salon-select-container {
+    margin: 1rem 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+.salon-select {
+    padding: 0.75rem;
+    border: 2px solid var(--surface-light);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--surface-light);
+    color: var(--text-dark);
+    min-width: 300px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.salon-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(156, 39, 176, 0.1);
+}
+
+.employees-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    margin-top: 2rem;
+}
+
+.employees-table th,
+.employees-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--surface-light);
+    color: var(--text-dark);
+}
+
+.employees-table th {
+    background: var(--surface-light);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.employee-row {
+    transition: all 0.2s ease;
+}
+
+.employee-row:hover {
+    background: var(--surface-light);
+}
+
+.search-container {
+    margin: 2rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.search-input {
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--surface-light);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--surface-light);
+    color: var(--text-dark);
+    min-width: 300px;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(156, 39, 176, 0.1);
+}
+
+@media (max-width: 768px) {
+    .salon-select,
+    .search-input {
+        min-width: 100%;
+    }
+}
+
+.header-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.button-danger {
+    background: var(--error);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.button-danger:hover {
+    background: #d32f2f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.button-danger:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.delete-employee-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Add a warning text style for the delete modal */
+.modal-content h2.delete-header {
+    color: var(--error);
+}
+
+.update-employee-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.update-employee-form .form-group {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.update-employee-form .form-group:not(:first-child) {
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.delete-confirmation {
+    text-align: center;
+}
+
+.delete-warning {
+    color: var(--error);
+    font-size: 1.1rem;
+    margin: 1rem 0;
+}
+
+.employee-details {
+    background: var(--surface-light);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    text-align: left;
+}
+
+.employee-details p {
+    margin: 0.5rem 0;
+    color: var(--text-dark);
+}
+
+.employee-details strong {
+    color: var(--primary);
+    margin-right: 0.5rem;
+}
+
+.delete-warning-text {
+    color: var(--error);
+    font-size: 0.9rem;
+    font-style: italic;
+    margin: 1rem 0;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.service-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.service-card h3 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.service-card p {
+    color: var(--text-dark);
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.no-services {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem;
+    background: var(--surface-light);
+    border-radius: 12px;
+    color: var(--text-dark);
+    font-size: 1.1rem;
+}
+
+.add-service-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.add-service-form textarea {
+    padding: 0.75rem;
+    border: 2px solid var(--surface-light);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--surface-light);
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+    resize: vertical;
+    min-height: 100px;
+}
+
+.add-service-form textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(156, 39, 176, 0.1);
+    background: var(--surface-light);
+}
+
+.services-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    margin-top: 2rem;
+}
+
+.services-table th,
+.services-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--surface-light);
+    color: var(--text-dark);
+}
+
+.services-table th {
+    background: var(--surface-light);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.service-row {
+    transition: all 0.2s ease;
+}
+
+.service-row:hover {
+    background: var(--surface-light);
+}
+
+.service-row td:first-child {
+    font-weight: 500;
+    color: var(--primary);
+}
+
+.service-row td:last-child {
+    max-width: 400px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+    .services-table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .service-row td:last-child {
+        max-width: 200px;
+    }
+}
+
+.assign-service-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.assign-service-form .form-group {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.assign-service-form .form-group:not(:first-child) {
+    animation: slideDown 0.3s ease;
+}
+
+.assign-service-form input[type="number"] {
+    padding: 0.75rem;
+    border: 2px solid var(--surface-light);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--surface-light);
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.assign-service-form input[type="number"]:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(156, 39, 176, 0.1);
+    background: var(--surface-light);
+}
+
+.assign-service-form input[type="number"]::-webkit-inner-spin-button,
+.assign-service-form input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1;
+    height: 2em;
+}
+
+.appointment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.appointment-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.appointment-form label {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.appointment-form select,
+.appointment-form input {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: var(--surface-light);
+    color: var(--text-dark);
+}
+
+.appointment-form select:disabled {
+    background-color: var(--background-secondary);
+    cursor: not-allowed;
+}
+
+.appointment-form select:focus,
+.appointment-form input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.appointment-form .form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+.working-hours-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.working-hours-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.working-hours-form .time-inputs {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.working-hours-form .time-inputs input {
+    padding: 0.75rem;
+    border: 2px solid var(--surface-light);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--surface-light);
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+}
+
+.working-hours-form .time-inputs input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(156, 39, 176, 0.1);
+}
+
+.working-hours-form .time-inputs span {
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.review-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: var(--surface);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.rating-options {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    justify-content: center;
+}
+
+.rating-label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.rating-label input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.rating-star {
+    font-size: 2.5rem;
+    color: #ddd;
+    transition: all 0.2s ease;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* When radio is checked, color all stars up to and including this one */
+.rating-label input[type="radio"]:checked + .rating-star {
+    color: #ffd700;
+    transform: scale(1.1);
+}
+
+/* Color all stars after the checked one */
+.rating-label input[type="radio"]:checked ~ .rating-label .rating-star {
+    color: #ddd;
+}
+
+/* Hover effects */
+.rating-label:hover .rating-star {
+    color: #ffd700;
+    transform: scale(1.1);
+}
+
+.rating-label:hover ~ .rating-label .rating-star {
+    color: #ddd;
+}
+
+/* Add a small label under each star */
+.rating-label::after {
+    content: attr(data-rating);
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    color: var(--text-dark);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.rating-label:hover::after {
+    opacity: 1;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.radio-label input[type="radio"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+}
+
+.form-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 0.75rem;
+    border: 2px solid var(--surface-light);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--surface-light);
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+    resize: vertical;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(156, 39, 176, 0.1);
+}
+
+.form-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--surface-light);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--surface-light);
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(156, 39, 176, 0.1);
 } 

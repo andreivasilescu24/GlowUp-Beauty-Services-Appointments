@@ -1,36 +1,19 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Register } from './components/auth/Register';
 import { Login } from './components/auth/Login';
+import { Categories } from './components/categories/Categories';
+import { Layout } from './components/layout/Layout';
 import { Home } from './pages/Home';
 import { BeautySalons } from './pages/BeautySalons';
-import { Categories } from './pages/Categories';
 import { MyAppointments } from './pages/MyAppointments';
 import { FavoriteSalons } from './pages/FavoriteSalons';
 import { MySalons } from './pages/MySalons';
 import { SalonAppointments } from './pages/SalonAppointments';
 import { ManageEmployees } from './pages/ManageEmployees';
-import type { UserRole } from './types/auth';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { BeautyServices } from './pages/BeautyServices';
+import { Reviews } from './pages/Reviews';
 import './App.css';
-
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-  allowedRoles?: UserRole[];
-}
-
-const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
-  const token = localStorage.getItem('token');
-  const userRole = localStorage.getItem('user_role') as UserRole;
-
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (allowedRoles && !allowedRoles.includes(userRole)) {
-    return <Navigate to="/" replace />;
-  }
-
-  return <>{children}</>;
-};
 
 function App() {
   return (
@@ -39,52 +22,85 @@ function App() {
         {/* Public Routes */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        
+
         {/* Protected Routes - All Users */}
         <Route path="/home" element={
           <ProtectedRoute>
-            <Home />
+            <Layout>
+              <Home />
+            </Layout>
           </ProtectedRoute>
         } />
         <Route path="/salons" element={
           <ProtectedRoute>
-            <BeautySalons />
+            <Layout>
+              <BeautySalons />
+            </Layout>
           </ProtectedRoute>
         } />
         <Route path="/categories" element={
           <ProtectedRoute>
-            <Categories />
+            <Layout>
+              <Categories />
+            </Layout>
           </ProtectedRoute>
         } />
 
         {/* Protected Routes - Users Only */}
         <Route path="/appointments" element={
           <ProtectedRoute allowedRoles={['USER']}>
-            <MyAppointments />
+            <Layout>
+              <MyAppointments />
+            </Layout>
           </ProtectedRoute>
         } />
         <Route path="/favorites" element={
           <ProtectedRoute allowedRoles={['USER']}>
-            <FavoriteSalons />
+            <Layout>
+              <FavoriteSalons />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/reviews" element={
+          <ProtectedRoute allowedRoles={['USER']}>
+            <Layout>
+              <Reviews />
+            </Layout>
           </ProtectedRoute>
         } />
 
         {/* Protected Routes - Owners Only */}
         <Route path="/my-salons" element={
           <ProtectedRoute allowedRoles={['OWNER']}>
-            <MySalons />
+            <Layout>
+              <MySalons />
+            </Layout>
           </ProtectedRoute>
         } />
         <Route path="/salon-appointments" element={
           <ProtectedRoute allowedRoles={['OWNER']}>
-            <SalonAppointments />
+            <Layout>
+              <SalonAppointments />
+            </Layout>
           </ProtectedRoute>
         } />
         <Route path="/employees" element={
           <ProtectedRoute allowedRoles={['OWNER']}>
-            <ManageEmployees />
+            <Layout>
+              <ManageEmployees />
+            </Layout>
           </ProtectedRoute>
         } />
+        <Route path="/beauty-services" element={
+          <ProtectedRoute allowedRoles={['OWNER']}>
+            <Layout>
+              <BeautyServices />
+            </Layout>
+          </ProtectedRoute>
+        } />
+
+        {/* Default Route */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
   );

@@ -1,0 +1,190 @@
+.categories-container {
+    padding: 2rem;
+    max-width: 800px; /* Reduced max-width since we have less content */
+    margin: 0 auto;
+    min-height: calc(100vh - 64px); /* Adjust for navbar height */
+}
+
+.categories-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.categories-header h1 {
+    color: var(--text-dark);
+    font-size: 2rem;
+    margin: 0;
+    flex: 0.7;
+}
+
+.search-container {
+    flex: 0.3;
+    min-width: 250px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--surface-light);
+    border-radius: 12px;
+    background: var(--surface-light);
+    color: var(--text-dark);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(156, 39, 176, 0.1);
+}
+
+.table-container {
+    background: var(--surface);
+    border-radius: 12px;
+    overflow: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    max-height: calc(100vh - 250px);
+}
+
+.categories-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center; /* Center all table content by default */
+}
+
+.categories-table th,
+.categories-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--surface-light);
+    color: var(--text-dark);
+    text-align: center; /* Ensure both header and data are centered */
+}
+
+.categories-table th {
+    background: var(--surface-light);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.category-row {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.category-row:hover {
+    background: var(--surface-light);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.category-row:active {
+    transform: translateY(0);
+    background: var(--surface-light);
+}
+
+.category-row:focus {
+    outline: none;
+    background: var(--surface-light);
+    box-shadow: 0 0 0 2px var(--primary);
+}
+
+.category-name {
+    font-weight: 500;
+    color: var(--text-dark);
+    font-size: 1.1rem;
+}
+
+.categories-table .no-results {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    background: var(--surface);
+    border-radius: 12px;
+    margin-top: 1rem;
+}
+
+.pagination-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
+.pagination-button:disabled {
+    background: var(--surface-light);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.pagination-info {
+    color: var(--text-dark);
+    font-size: 0.9rem;
+}
+
+.categories-loading,
+.categories-error {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-dark);
+    font-size: 1.1rem;
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.categories-error {
+    color: var(--error);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .categories-container {
+        padding: 1rem;
+    }
+
+    .categories-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-container {
+        flex: 1;
+        width: 100%;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+} 

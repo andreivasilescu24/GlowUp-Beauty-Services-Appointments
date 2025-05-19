@@ -14,7 +14,7 @@ export const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-brand">
-                <Link to="/">
+                <Link to="/home">
                     <span className="brand-name">GlowUp</span>
                 </Link>
             </div>
@@ -29,15 +29,16 @@ export const Navbar = () => {
                 {userRole === 'USER' && (
                     <>
                         <Link to="/appointments" className="nav-link">My Appointments</Link>
+                        <Link to="/reviews" className="nav-link">Reviews</Link>
                     </>
                 )}
 
                 {/* Owner-specific Links */}
                 {userRole === 'OWNER' && (
                     <>
-                        <Link to="/my-salons" className="nav-link">My Salons</Link>
-                        <Link to="/salon-appointments" className="nav-link">Salon Appointments</Link>
+                        <Link to="/salons" className="nav-link">My Salons</Link>
                         <Link to="/employees" className="nav-link">Manage Employees</Link>
+                        <Link to="/beauty-services" className="nav-link">Beauty Services</Link>
                     </>
                 )}
             </div>

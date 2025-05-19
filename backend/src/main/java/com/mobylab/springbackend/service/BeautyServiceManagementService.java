@@ -46,6 +46,7 @@ public class BeautyServiceManagementService {
 
         return beautyServiceList.map(services -> services.stream().map(
                         service -> new BeautyServiceDto()
+                                .setId(service.getId())
                                 .setName(service.getName())
                                 .setDescription(service.getDescription())
                 ).collect(Collectors.toList())

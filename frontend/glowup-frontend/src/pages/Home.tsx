@@ -1,28 +1,24 @@
 import { Layout } from '../components/layout/Layout';
+import { useNavigate } from 'react-router-dom';
 import '../styles/pages.css';
 
 export const Home = () => {
+    const navigate = useNavigate();
+
     return (
         <Layout>
             <div className="page-container">
-                <div className="page-content">
-                    <h1 className="page-title">Welcome to GlowUp!</h1>
-                    <p className="page-description">Your beauty journey starts here.</p>
-                    
-                    <div className="welcome-stats">
-                        <div className="stat-card">
-                            <h3>Beauty Salons</h3>
-                            <p>Discover top-rated salons in your area</p>
-                        </div>
-                        <div className="stat-card">
-                            <h3>Services</h3>
-                            <p>Browse through various beauty services</p>
-                        </div>
-                        <div className="stat-card">
-                            <h3>Appointments</h3>
-                            <p>Book and manage your appointments</p>
-                        </div>
-                    </div>
+                <div className="home-content">
+                    <h1 className="home-title">Welcome to GlowUp!</h1>
+                    <p className="home-description">
+                        Discover and book appointments at the finest beauty salons in your area.
+                    </p>
+                    <button 
+                        className="explore-button"
+                        onClick={() => navigate("/salons")}
+                    >
+                        Explore our Salons
+                    </button>
                 </div>
             </div>
         </Layout>

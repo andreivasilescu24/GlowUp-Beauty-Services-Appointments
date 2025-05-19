@@ -1,9 +1,6 @@
 package com.mobylab.springbackend.service;
 
-import com.mobylab.springbackend.entity.BeautySalon;
-import com.mobylab.springbackend.entity.BeautyService;
-import com.mobylab.springbackend.entity.Employee;
-import com.mobylab.springbackend.entity.EmployeeAvailableService;
+import com.mobylab.springbackend.entity.*;
 import com.mobylab.springbackend.exception.BadRequestException;
 import com.mobylab.springbackend.exception.ResourceNotFoundException;
 import com.mobylab.springbackend.repository.*;
@@ -13,6 +10,8 @@ import com.mobylab.springbackend.service.dto.employeeservices.EmployeeAvailableS
 import com.mobylab.springbackend.service.dto.employee.EmployeeDto;
 import com.mobylab.springbackend.util.OwnershipUtils;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;

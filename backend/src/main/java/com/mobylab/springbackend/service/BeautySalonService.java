@@ -135,4 +135,29 @@ public class BeautySalonService {
                 .setPhone(beautySalon.getPhone())
                 .setNumEmployees(beautySalon.getNumEmployees());
     }
+
+    public List<BeautySalonDto> getMyBeautySalons() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        User owner = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        Optional<List<BeautySalon>> ownerBeautySalons = beautySalonRepository.getBeautySalonsByOwner(owner);
+
+        if (ownerBeautySalons.isEmpty()) {
+            throw new ResourceNotFoundException("No beauty salons found for this user");
+        } else {
+            return ownerBeautySalons.get().stream().map(beautySalon ->
+                    new BeautySalonDto()
+                            .setId(beautySalon.getId())
+                            .setName(beautySalon.getName())
+                            .setCity(beautySalon.getCity())
+                            .setAddress(beautySalon.getAddress())
+                            .setEmail(beautySalon.getEmail())
+                            .setPhone(beautySalon.getPhone())
+                            .setNumEmployees(beautySalon.getNumEmployees())
+            ).collect(Collectors.toList());
+        }
+    }
 }
